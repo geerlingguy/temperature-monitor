@@ -5,7 +5,7 @@ import serial
 from time import strftime
 
 # Variables.
-modem = "/dev/tty.usbmodem14241"
+modem = "/dev/ttyACM0" # Default for a Arduino Uno on Raspberry Pi USB.
 logfile = "./temps.log"
 
 # Open the logfile for appending (create if necessary), flush immediately.

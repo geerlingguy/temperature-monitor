@@ -18,6 +18,10 @@ For now, I'd recommend reading through the following guides for a step-by-step g
   - [How to measure temperature with your Arduino and a DS18B20](http://www.tweaking4all.com/hardware/arduino/arduino-ds18b20-temperature-sensor/)
   - [The Raspberry Pi and Wireless RF (XRF) Temperature Loggers](http://www.seanlandsman.com/2013/02/the-raspberry-pi-and-wireless-rf-xrf.html)
 
+To run the Python script in the background, e.g. on a Raspberry Pi:
+
+    nohup python temps.py > /dev/null 2>&1 &
+
 ## License
 
 MIT
