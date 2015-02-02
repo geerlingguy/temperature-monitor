@@ -20,6 +20,14 @@ For now, I'd recommend reading through the following guides for a step-by-step g
   - [How to measure temperature with your Arduino and a DS18B20](http://www.tweaking4all.com/hardware/arduino/arduino-ds18b20-temperature-sensor/)
   - [The Raspberry Pi and Wireless RF (XRF) Temperature Loggers](http://www.seanlandsman.com/2013/02/the-raspberry-pi-and-wireless-rf-xrf.html)
 
+You need to have MySQL server installed and available (future versions of this project will configure everything for you... but for now, just get it going and either use the root account (not recommended) or set up a new user with access to the database defined by `schema.sql`).
+
+Create the MySQL database required for storing logged temperatures:
+
+    mysql -u [user] -p[password] < schema.sql
+
+This will create the database required by the `temps.py` script.
+
 To run the Python script in the background, e.g. on a Raspberry Pi:
 
     nohup python temps.py > /dev/null 2>&1 &
