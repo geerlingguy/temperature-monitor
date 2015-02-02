@@ -1,2 +1,3 @@
 .DS_Store
 temps.log
+*/node_modules/*

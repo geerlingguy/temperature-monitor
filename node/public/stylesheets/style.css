@@ -1,0 +1,12 @@
+body {
+  padding: 1em;
+  font: 1em "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: .25em 0;
+}
+
+a {
+  color: #00B7FF;
+}

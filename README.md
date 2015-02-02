@@ -11,6 +11,8 @@ For now, this project contains the following:
 
 ## Installation & Setup
 
+### Arduino/Raspberry Pi
+
 First of all, you'll need an Arduino, breadboard, DS18x20 temperature probe (with three wires), a breadboard, a resistor, some jumper wires (or a board to solder everything together, if you desire the permanence), and a USB cable to hook up the Arduino to a Raspberry Pi or some other computer.
 
 For now, I'd recommend reading through the following guides for a step-by-step guide:
@@ -21,6 +23,15 @@ For now, I'd recommend reading through the following guides for a step-by-step g
 To run the Python script in the background, e.g. on a Raspberry Pi:
 
     nohup python temps.py > /dev/null 2>&1 &
+
+### Express App for Displaying Data
+
+  1. Install Node.js and NPM.
+  2. `cd` into `node` directory.
+  3. Install required dependencies with `npm install`.
+  4. Run app in debug mode: `DEBUG=node:* ./bin/www`.
+
+This app is a work in progress for now...
 
 ## License
 
