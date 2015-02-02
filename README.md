@@ -11,6 +11,20 @@ For now, this project contains the following:
 
 ## Installation & Setup
 
+### Vagrant quickstart for testing/hacking
+
+Set up the virtual machine:
+
+  1. Install Vagrant, VirtualBox and Ansible.
+  2. `cd` into `setup` directory and run `ansible-galaxy install -r requirements.txt`.
+  3. `cd` back into this directory and run `vagrant up`.
+
+Start the Express app for Temperature display:
+
+  1. `cd` into `/vagrant/node`.
+  2. Run the command `DEBUG=node:* ./bin/www`.
+  3. You can now visit the dashboard at `http://192.168.33.2:3000/`.
+
 ### Arduino/Raspberry Pi
 
 First of all, you'll need an Arduino, breadboard, DS18x20 temperature probe (with three wires), a breadboard, a resistor, some jumper wires (or a board to solder everything together, if you desire the permanence), and a USB cable to hook up the Arduino to a Raspberry Pi or some other computer.

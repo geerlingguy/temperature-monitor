@@ -1,0 +1,16 @@
+---
+- hosts: all
+
+  vars_files:
+    - vars.yml
+
+  roles:
+    - geerlingguy.mysql
+    - geerlingguy.nodejs
+
+  tasks:
+    - name: Set up temperature logging database.
+      shell: "mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} < /vagrant/setup/database/{{ item }}"
+      with_items:
+        - schema.sql
+        - sample-data.sql

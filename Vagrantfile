@@ -10,7 +10,8 @@ Vagrant.configure(2) do |config|
     vb.memory = "512"
   end
 
-  # TODO: Use Ansible, install MySQL properly.
-  config.vm.provision "shell",
-    inline: "apt-get update -y && apt-get install -y mysql-client mysql-server"
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "setup/playbook.yml"
+    ansible.sudo = true
+  end
 end

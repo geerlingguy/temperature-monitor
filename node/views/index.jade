@@ -1,6 +1,10 @@
 extends layout
 
+block head
+  script.
+    var temps = !{JSON.stringify(temps).replace(/<\//g, "<\\/")}
+
 block content
   h1= title
-  p Times are in UTC.
+  p Times are in your browser's timezone.
   div#temps

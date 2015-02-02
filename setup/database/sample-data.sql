@@ -1,3 +1,4 @@
+USE `temperature_log`;
 INSERT INTO sensors VALUES(NULL,'Downstairs office');
 INSERT INTO temps VALUES(NULL,1,68.85,1422909615);
 INSERT INTO temps VALUES(NULL,1,68.91,1422909618);
