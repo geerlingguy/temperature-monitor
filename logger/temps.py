@@ -27,7 +27,7 @@ def read(serial):
         db.rollback()
 
     # Log data to command line.
-    print line,
+    print "{0}, {1}".format(date, temp.rstrip())
 
 # Connect to the Arduino's serial port.
 ser = serial.Serial(modem, baudrate=9600, bytesize=8, parity='N', stopbits=1)
