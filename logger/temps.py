@@ -21,7 +21,7 @@ log = open(logfile, "a+", 0)
 def read(serial):
     temp = serial.readline()
     date = datetime.utcnow()
-    time = calendar.timegm(d.utctimetuple())
+    time = calendar.timegm(date.utctimetuple())
 
     # Log data to file.
     line = "{0}, {1}\n".format(date, temp.rstrip())

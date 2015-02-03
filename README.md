@@ -41,7 +41,9 @@ You need to have MySQL server installed and available (future versions of this p
 (All commands run from project root directory).
 
   1. Install MySQL: `sudo apt-get install mysql-client mysql-server`
-  2. Start MySQL: `sudo service mysql start`
+  2. Start MySQL and make sure it's enabled on boot:
+    a. `sudo service mysql start`
+    b. `sudo update-rc.d mysql defaults`
   3. Create the MySQL database for logging temperatures:
     a. `mysql -u [user] -p[password] < setup/database/schema.sql`
   4. Install Python logger app dependencies:
