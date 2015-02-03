@@ -9,17 +9,33 @@ var routes = require('./routes/index');
 
 var app = express();
 
+// Connect to MySQL database.
+var mysql = require('mysql');
+var pool = mysql.createPool({
+    connectionLimit: 5,
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'root',
+    database: 'temperature_log'
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Make database connection available to routes.
+app.use(function(req, res, next) {
+    req.pool = pool;
+    next();
+});
 
 app.use('/', routes);
 

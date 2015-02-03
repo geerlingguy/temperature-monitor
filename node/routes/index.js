@@ -1,27 +1,21 @@
 var express = require('express');
-var mysql = require('mysql');
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  // Connect to MySQL.
-  var connection = mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'root',
-    database: 'temperature_log'
-  });
+    var pool = req.pool;
 
-  // TODO: Get all sensors, then loop through them and build data for each.
+    // TODO: Get all sensors, then loop through them and build data for each.
 
-  // Get all temperature data for a given sensor.
-  connection.query("SELECT temp,time FROM temps WHERE sensor = '1'", function(err, rows, fields) {
-    if (err) throw err;
-    res.render('index', { title: 'Temperature Monitor', temps: rows });
-  });
-
-  // Close the MySQL connection.
-  connection.end();
+    // Get all temperature data for a given sensor.
+    pool.getConnection(function(err, connection) {
+        if (err) throw err;
+        connection.query("SELECT temp,time FROM temps WHERE sensor = '1'", function(err, rows) {
+            if (err) throw err;
+            connection.release();
+            res.render('index', { title: 'Temperature Monitor', temps: rows });
+        });
+    });
 });
 
 module.exports = router;
