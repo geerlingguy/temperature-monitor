@@ -21,7 +21,7 @@ Set up the virtual machine:
 
 Start the Express app for Temperature display:
 
-  1. `cd` into `/vagrant/node`.
+  1. `cd` into `/vagrant/dashboard`.
   2. Run the command `DEBUG=node:* ./bin/www`.
   3. You can now visit the dashboard at `http://192.168.33.2:3000/`.
 
@@ -42,14 +42,19 @@ Create the MySQL database required for storing logged temperatures:
 
 This will create the database required by the `temps.py` script.
 
+Install Python logger dependencies:
+
+  1. `sudo apt-get install python-pip python-dev libmysqlclient-dev`
+  2. `sudo pip install -r logger/requirements.txt`
+
 To run the Python script in the background, e.g. on a Raspberry Pi:
 
-    nohup python temps.py > /dev/null 2>&1 &
+    nohup python logger/temps.py > /dev/null 2>&1 &
 
 ### Express App for Displaying Data
 
   1. Install Node.js and NPM.
-  2. `cd` into `node` directory.
+  2. `cd` into `dashboard` directory.
   3. Install required dependencies with `npm install`.
   4. Run the app:
     - Debug mode: `DEBUG=node:* ./bin/www`

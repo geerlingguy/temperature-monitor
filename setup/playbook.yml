@@ -9,6 +9,16 @@
     - geerlingguy.nodejs
 
   tasks:
+    - name: Install dependencies for Python app.
+      apt: "name={{ item }} state=present"
+      with_items:
+        - python-pip
+        - python-dev
+        - libmysqlclient-dev
+
+    - name: Install required Python libraries with pip.
+      pip: requirements=/vagrant/logger/requirements.txt
+
     - name: Set up temperature logging database.
       shell: "mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} < /vagrant/setup/database/{{ item }}"
       with_items:
