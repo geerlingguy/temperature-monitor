@@ -51,7 +51,9 @@ To run the Python script in the background, e.g. on a Raspberry Pi:
   1. Install Node.js and NPM.
   2. `cd` into `node` directory.
   3. Install required dependencies with `npm install`.
-  4. Run app in debug mode: `DEBUG=node:* ./bin/www`.
+  4. Run the app:
+    - Debug mode: `DEBUG=node:* ./bin/www`
+    - Production: `./bin/www`
 
 You can then view a dashboard at `http://localhost:3000/`.
 

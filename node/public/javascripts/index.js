@@ -1,6 +1,10 @@
 $(function() {
+  // Get time 24h ago.
+  var now = Math.round(new Date().getTime() / 1000);
+  var start = now - (24 * 3600);
+
   // Load temperature data through AJAX.
-  $.getJSON('/temps', function(data) {
+  $.getJSON('/temps', { sensor: 1, startTime: start }, function(data) {
     var temps = [];
     for (var i = 0; i < data.length; i++) {
       temps.push([data[i]['time'] * 1000, data[i]['temp']]);
@@ -16,7 +20,9 @@ $(function() {
       xaxis: {
         mode: "time",
         timeformat: "%I:%M:%S %p",
-        timezone: "browser"
+        timezone: "browser",
+        min: start * 1000,
+        max: now * 1000
       },
       "lines": {"show": "true"},
     });
