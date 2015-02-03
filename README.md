@@ -36,20 +36,18 @@ For now, I'd recommend reading through the following guides for a step-by-step g
 
 You need to have MySQL server installed and available (future versions of this project will configure everything for you... but for now, just get it going and either use the root account (not recommended) or set up a new user with access to the database defined by `schema.sql`).
 
-Create the MySQL database required for storing logged temperatures:
+### Python App for Logging Data
 
-    mysql -u [user] -p[password] < schema.sql
+(All commands run from project root directory).
 
-This will create the database required by the `temps.py` script.
-
-Install Python logger dependencies:
-
-  1. `sudo apt-get install python-pip python-dev libmysqlclient-dev`
-  2. `sudo pip install -r logger/requirements.txt`
-
-To run the Python script in the background, e.g. on a Raspberry Pi:
-
-    nohup python logger/temps.py > /dev/null 2>&1 &
+  1. Install MySQL: `sudo apt-get install mysql-client mysql-server`
+  2. Start MySQL: `sudo service mysql start`
+  3. Create the MySQL database for logging temperatures:
+    a. `mysql -u [user] -p[password] < setup/database/schema.sql`
+  4. Install Python logger app dependencies:
+    a. `sudo apt-get install python-pip python-dev libmysqlclient-dev`
+    b. `sudo pip install -r logger/requirements.txt`
+  5. Start the Python script: `nohup python logger/temps.py > /dev/null 2>&1 &`
 
 ### Express App for Displaying Data
 

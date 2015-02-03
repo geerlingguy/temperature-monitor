@@ -3,6 +3,7 @@
 
 import serial
 import MySQLdb
+from datetime import datetime
 import calendar
 
 # Connect to the MySQL database.
@@ -19,7 +20,8 @@ log = open(logfile, "a+", 0)
 # Function to read a line, write it to the file, and print it to the screen.
 def read(serial):
     temp = serial.readline()
-    date = calendar.timegm(d.utctimetuple())
+    date = datetime.utcnow()
+    time = calendar.timegm(d.utctimetuple())
 
     # Log data to file.
     line = "{0}, {1}\n".format(date, temp.rstrip())
@@ -27,7 +29,7 @@ def read(serial):
 
     # Log data to database.
     try:
-        cursor.execute("""INSERT INTO temps VALUES (NULL,1,%s,%s)""", (temp,date))
+        cursor.execute("""INSERT INTO temps VALUES (NULL,1,%s,%s)""", (temp,time))
         db.commit()
     except:
         db.rollback()
