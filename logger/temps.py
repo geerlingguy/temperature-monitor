@@ -12,20 +12,12 @@ cursor = db.cursor()
 
 # Variables.
 modem = "/dev/ttyACM0" # Default for a Arduino Uno on Raspberry Pi USB.
-logfile = "./temps.log"
 
-# Open the logfile for appending (create if necessary), flush immediately.
-log = open(logfile, "a+", 0)
-
-# Function to read a line, write it to the file, and print it to the screen.
+# Function to read a line, write it to database, and print it to the screen.
 def read(serial):
     temp = serial.readline()
     date = datetime.utcnow()
     time = calendar.timegm(date.utctimetuple())
-
-    # Log data to file.
-    line = "{0}, {1}\n".format(date, temp.rstrip())
-    log.write(line)
 
     # Log data to database.
     try:
@@ -33,15 +25,16 @@ def read(serial):
         db.commit()
     except:
         db.rollback()
+
+    # Log data to command line.
     print line,
 
 # Connect to the Arduino's serial port.
-ser = serial.Serial(modem, 9600)
+ser = serial.Serial(modem, baudrate=9600, bytesize=8, parity='N', stopbits=1)
 
 # Read each line as it's output.
 while True:
     read(ser)
 
 # Close resource handles when we're finished logging data.
-log.close();
 db.close();
