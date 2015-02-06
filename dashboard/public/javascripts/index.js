@@ -10,7 +10,7 @@ $(function() {
     var start = now - (24 * 3600);
 
     // Load temperature data through AJAX.
-    $.getJSON('/temps', { sensor: 1, startTime: start }, function(data) {
+    $.getJSON('/temps/1', { startTime: start }, function(data) {
       var temps = [];
       for (var i = 0; i < data.length; i++) {
         temps.push([data[i]['time'] * 1000, data[i]['temp']]);
