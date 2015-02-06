@@ -10,14 +10,21 @@ $(function() {
     var start = now - (24 * 3600);
 
     // Load temperature data through AJAX.
-    $.getJSON('/temps/1', { startTime: start }, function(data) {
-      var temps = [];
+    $.getJSON('/temps/all', { startTime: start }, function(data) {
+      var temp_data = [];
       for (var i = 0; i < data.length; i++) {
-        temps.push([data[i]['time'] * 1000, data[i]['temp']]);
+        temp_data[i] = {
+          'label': data[i]['label'],
+          'data': []
+        };
+        for (var j = 0; j < data[i]['data'].length; j++) {
+          var dataPoint = [data[i]['data'][j]['time'] * 1000, data[i]['data'][j]['temp']];
+          temp_data[i]['data'].push(dataPoint);
+        };
       }
 
       // Plot the temperatures on the graph.
-      $.plot("#temps", [ temps ], {
+      $.plot("#temps", temp_data, {
         yaxis: {
           tickFormatter: function (v, axis) {
             return v.toFixed(axis.tickDecimals) +"°F "
