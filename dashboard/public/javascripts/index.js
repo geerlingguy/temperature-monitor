@@ -37,7 +37,11 @@ $(function() {
           min: start * 1000,
           max: now * 1000
         },
-        "lines": {"show": "true"},
+        lines: {show: true},
+        legend: {
+          show: true,
+          position: "sw"
+        }
       });
     });
   }
