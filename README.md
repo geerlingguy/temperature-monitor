@@ -68,6 +68,19 @@ Notes:
   - Prior to logging outdoor temperatures, you should add a sensor and update the ID in `outdoor-temps.py` with this ID. See `dashboard`'s API documentation for more info.
   - Piping the output to `/dev/null` means you won't see if there are any errors (like unreachable hosts, etc.). That's okay; if you're having trouble, just manually run `python outdoor-temps.py` and see what errors might be happening.
 
+#### Nest temperature logging
+
+There is another script, `nest-temps.py`, which requires you to have a Nest Developer account for API access. More information inside that script for now, but basically, once you're configured, get an access token then find your nest thermostat ID. Add those as the environment variables:
+
+  - `NEST_ACCESS_TOKEN`
+  - `NEST_THERMOSTAT_ID`
+
+Then add a cron job like:
+
+    */5 * * * * python /path/to/temperature-monitor/logger/nest-temps.py > /dev/null 2>&1
+
+Note that Nest's API documentation suggests "To avoid errors, we recommend you limit requests to one call per minute, maximum.", and since every call requires the Nest to wake up to return data to Nest's API servers, it's best to be more conservative with this cron job.
+
 ### `dashboard` - Express App/API for Displaying and Adding Data
 
   1. Install Node.js and NPM ([guide](http://weworkweplay.com/play/raspberry-pi-nodejs/)):
