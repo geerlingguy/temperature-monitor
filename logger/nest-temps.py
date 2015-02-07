@@ -56,7 +56,7 @@ if req.status_code != requests.codes.ok:
     exit(1)
 
 data = req.json()
-if ('target_temperature_f' in data.keys()):
+if ('ambient_temperature_f' in data.keys()):
     temp = "{0:.2f}".format(data['target_temperature_f'])
 
     # Send data to our temperature logger.
