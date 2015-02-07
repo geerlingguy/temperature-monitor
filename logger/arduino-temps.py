@@ -8,7 +8,8 @@ import requests
 
 # Import configuration from 'arduino-temps.conf' file.
 config = {}
-execfile("./arduino-temps.conf", config)
+config_dir = os.path.dirname(os.path.abspath(__file__))
+execfile(config_dir + "/arduino-temps.conf", config)
 
 # Function to read line, write it to the dashboard, and print it to the screen.
 def read(serial):
