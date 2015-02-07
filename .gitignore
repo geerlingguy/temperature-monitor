@@ -1,4 +1,12 @@
+# Mac.
 .DS_Store
+
+# Vagrant.
 .vagrant
+
+# App-specific files.
 *.log
+/logger/arduino-temps.conf
+
+# Node.js.
 */node_modules/*

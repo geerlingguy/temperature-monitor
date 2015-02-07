@@ -48,7 +48,8 @@ You need to have MySQL server installed and available (future versions of this p
   4. Install Python logger app dependencies:
     a. `sudo apt-get install python-pip python-dev libmysqlclient-dev`
     b. `sudo pip install -r logger/requirements.txt`
-  5. Start the Python script: `nohup python logger/temps.py > /dev/null 2>&1 &`
+  5. Copy `arduino-temps.example.conf` to `arduino-temps.conf` and modify to suit your needs.
+  6. Start the Python script: `nohup python logger/arduino-temps.py > /dev/null 2>&1 &`
 
 #### Outdoor temperature logging
 
