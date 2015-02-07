@@ -2,14 +2,9 @@
 
 <img src="https://raw.githubusercontent.com/geerlingguy/temperature-monitor/master/dashboard/screenshot.png" alt="Temperature Monitoring Dashboard" />
 
-I've had an Arduino and Raspberry Pi sitting unused in a box for a couple years now. I decided to start playing around with temperature monitoring, to see if I could get some interesting data out of a bunch of cheap temperature sensors I bought.
+I've had an Arduino and Raspberry Pi sitting unused in a box for a couple years now. I decided to start playing around with temperature monitoring, to see if I could get some interesting data out of a bunch of cheap temperature sensors I bought, and experiment with ways to heat and cool the house more efficiently (someday incorporating zones and schedules that are more advanced than what my Nest can handle).
 
-I'll be experimenting with wired temperature probes, wireless (RF) probes, and maybe some other stuff while I'm at it.
-
-For now, this project contains the following:
-
-  - An Arduino sketch, `DS18x20_Temperature_Output.ino`, which contains the Sketch telling my Arduino to read the temperature on a probe on pin 2 every 30s and output the temperature as a float (e.g. `72.25`) in fahrenheit.
-  - A python script, `temps.py`, which reads the Arduino's serial output and prints a datestamp + temperature to `temps.log` and to the command line whenever the Arduino sends output.
+I'll be experimenting with wired temperature probes, wireless (RF) probes, Nest API integration, and maybe some other stuff while I'm at it.
 
 ## Installation & Setup
 
@@ -35,6 +30,8 @@ For now, I'd recommend reading through the following guides for a step-by-step g
 
   - [How to measure temperature with your Arduino and a DS18B20](http://www.tweaking4all.com/hardware/arduino/arduino-ds18b20-temperature-sensor/)
   - [The Raspberry Pi and Wireless RF (XRF) Temperature Loggers](http://www.seanlandsman.com/2013/02/the-raspberry-pi-and-wireless-rf-xrf.html)
+
+This project contains an Arduino Uno sketch, `DS18x20_Temperature_Output.ino`, which tells a USB-connected Arduino Uno to read the temperature on a probe on pin 2 every 30s and output the temperature as a float (e.g. `72.25`) in fahrenheit.
 
 You need to have MySQL server installed and available (future versions of this project will configure everything for you, but for now, just get it going and either use the root account (not recommended) or set up a new user with access to the database defined by `schema.sql`).
 
