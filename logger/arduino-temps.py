@@ -1,6 +1,7 @@
 # Arduino Uno temperature logging script.
 # @author Jeff Geerling, 2015.
 
+import os
 import serial
 from datetime import datetime
 import calendar
