@@ -2,22 +2,33 @@
 # @author Jeff Geerling, 2015.
 
 import json
-import urllib2
 from datetime import datetime
 import calendar
+import requests
+
+# Sensor ID for 'outdoor' sensor.
+sensor_id = 2
+
+# URI for temps callback on host running the dashboard app.
+dashboard_uri = 'http://geerpi:3000/temps'
 
 # Open Weather Map city ID.
 city_id = '4407084'
 
-# Get the current time (UNIX timestamp).
+# Current time (UNIX timestamp).
 date = datetime.utcnow()
 time = calendar.timegm(date.utctimetuple())
 
-# Get the current temperature.
+# Current temperature.
 uri = 'http://api.openweathermap.org/data/2.5/weather?id=' + city_id
-data = json.load(urllib2.urlopen(uri))
+req = requests.get(uri)
 
-# TODO - Error handling; what if server is down, URL is incorrect, etc.?
+if req.status_code != requests.codes.ok:
+    print "Could not retrieve current weather data."
+    exit(1)
+
+# Get JSON as an object.
+data = req.json()
 
 # Log the data if it was returned successfully.
 if ('main' in data.keys()) and ('temp' in data['main'].keys()):
@@ -26,9 +37,19 @@ if ('main' in data.keys()) and ('temp' in data['main'].keys()):
     temp = "{0:.2f}".format(temp_f)
 
     # Send data to our temperature logger.
-    # TODO
+    payload = {
+        'sensor': sensor_id,
+        'temp': temp,
+        'time': time
+    }
+    post = requests.post(dashboard_uri, data=payload)
 
-    # Log data to command line.
-    print "{0}, {1}".format(time, temp.rstrip())
+    if post.status_code != requests.codes.ok:
+        print "Could not post data to dashboard app: " + post.json()['error']
+        exit(1)
 else:
     print "Could not retrieve data from Open Weather Map API."
+    exit(1)
+
+# Log the successfully-posted data.
+print "{0}, {1}".format(time, temp.rstrip())
