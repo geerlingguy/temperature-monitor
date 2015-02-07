@@ -64,6 +64,7 @@ Notes:
 
   - Prior to logging outdoor temperatures, you should add a sensor and update the ID in `outdoor-temps.py` with this ID. See `dashboard`'s API documentation for more info.
   - Piping the output to `/dev/null` means you won't see if there are any errors (like unreachable hosts, etc.). That's okay; if you're having trouble, just manually run `python outdoor-temps.py` and see what errors might be happening.
+  - If you need to diagnose cron issues, install `postfix` using `sudo apt-get install -y postfix`, and remove the ` > /dev/null 2>&1` from the end of the line in the cron job.
 
 #### Nest temperature logging
 
@@ -80,6 +81,7 @@ Notes:
 
   - Nest's API documentation suggests "To avoid errors, we recommend you limit requests to one call per minute, maximum.", and since every call requires the Nest to wake up to return data to Nest's API servers, it's best to be more conservative with this cron job.
   - The cron job above first pulls in the configuration in `~/.nest_api`. It's simplest to just create a file like that in your home folder with the two required environment variables exported. There are other ways, but I like simple, and my Pi is on an internal network, and the account running the dashboard is pretty secure anyways.
+  - If you need to diagnose cron issues, install `postfix` using `sudo apt-get install -y postfix`, and remove the ` > /dev/null 2>&1` from the end of the line in the cron job.
 
 ### `dashboard` - Express App/API for Displaying and Adding Data
 
