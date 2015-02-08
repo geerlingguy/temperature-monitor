@@ -53,13 +53,18 @@ You need to have MySQL server installed and available (future versions of this p
 
 #### Outdoor temperature logging
 
-There is also a small script for reading the current local temperature, courtesy of the [Open Weather Map API](http://openweathermap.org/api), `logger/outdoor-temps.py`. This script will read the current temperature for a given city, and send a request with the temperature data to the `dashboard` app.
+There are multiple scripts for reading current local temperatures via online weather APIs:
 
-It's customary to configure this outdoor temperature script via cron, so you can have it run once every minute, every 5 minutes, or on some more limited schedule than your other sensors, to ensure API limits aren't reached. (Plus, that's a lot of HTTP traffic for the poor Raspberry Pi!).
+  - [Open Weather Map API](http://openweathermap.org/api), using `logger/outdoor-temps-owm.py`. (No signup required, rate limit not specified, but temperature data is only updated about every 15-30 minutes).
+  - [Weather Underground API](http://www.wunderground.com/weather/api/d/pricing.html), using `logger/outdoor-temps-wu.py`. This API requires a 'paid' account, but the free plan allows for 500 calls per day, up to 10/min. This would allow you to call the API via cron every 3 minutes, maximum. The data is more real-time, but you have to sign up for access and can't poll the service as often as OWM. You must set two environment variables, `WU_API_KEY` and `WU_LOCATION` (e.g. `MO/Saint_Louis`, to use this script.
+
+It's customary to configure one of these outdoor temperature script via cron, so you can have it run once every minute, every 5 minutes, or on some more limited schedule than your other sensors, to ensure API limits aren't reached. (Plus, that's a lot of HTTP traffic for the poor Raspberry Pi!).
 
 You can add a cron job to call this script and update the outdoor temperature by logging into your pi and editing the crontab (`crontab -e`). Add a line like the following:
 
-    * * * * * python /path/to/temperature-monitor/logger/outdoor-temps.py > /dev/null 2>&1
+    * * * * * python /path/to/temperature-monitor/logger/outdoor-temps-[type].py > /dev/null 2>&1
+
+(`[type]` should be changed to whichever particular API you want to use.)
 
 Notes:
 

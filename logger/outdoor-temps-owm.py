@@ -1,4 +1,4 @@
-# Outdoor temperature logging script.
+# Outdoor temperature logging script - Open Weather Map.
 # @author Jeff Geerling, 2015.
 
 import json
