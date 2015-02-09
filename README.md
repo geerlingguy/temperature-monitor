@@ -84,8 +84,6 @@ To test whether the DS18B20 is working, you can `cd` into `/sys/bus/w1/devices`.
   2. Copy `pi-temps.example.conf` to `pi-temps.conf` and modify to suit your needs.
   3. Start the Python script: `nohup python logger/pi-temps.py > /dev/null 2>&1 &`
 
-TODO - This section might need some cleanup!
-
 #### Logging with the Arduino and DS18B20
 
 **Connect the DS18B20 to your Arduino**
