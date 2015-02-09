@@ -6,9 +6,7 @@ I've had an Arduino and Raspberry Pi sitting unused in a box for a couple years 
 
 I'll be experimenting with wired temperature probes, wireless (RF) probes, Nest API integration, and maybe some other stuff while I'm at it.
 
-## Installation & Setup
-
-### Vagrant quickstart for hacking
+## Vagrant quickstart for hacking
 
 Set up the virtual machine:
 
@@ -22,7 +20,9 @@ Start the Express app for Temperature display:
   2. Run the command `DEBUG=node:* ./bin/www`.
   3. You can now visit the dashboard at `http://192.168.33.2:3000/`.
 
-### Arduino/Raspberry Pi
+## Installation & Setup - Raspberry Pi-based Master
+
+
 
 First of all, you'll need an Arduino, breadboard, DS18x20 temperature probe (with three wires), a breadboard, a resistor, some jumper wires (or a board to solder everything together, if you desire the permanence), and a USB cable to hook up the Arduino to a Raspberry Pi or some other computer.
 
@@ -35,7 +35,9 @@ This project contains an Arduino Uno sketch, `DS18x20_Temperature_Output.ino`, w
 
 You need to have MySQL server installed and available (future versions of this project will configure everything for you, but for now, just get it going and either use the root account (not recommended) or set up a new user with access to the database defined by `schema.sql`).
 
-### `logger` - Python Scripts for Logging Data
+### Setting up the MySQL database
+
+This project uses a MySQL database to store and retrieve historical temperature data.
 
 (All commands run from project root directory).
 
@@ -45,13 +47,70 @@ You need to have MySQL server installed and available (future versions of this p
     b. `sudo update-rc.d mysql defaults`
   3. Create the MySQL database for logging temperatures:
     a. `mysql -u [user] -p[password] < setup/database/schema.sql`
-  4. Install Python logger app dependencies:
-    a. `sudo apt-get install python-pip python-dev libmysqlclient-dev`
-    b. `sudo pip install -r logger/requirements.txt`
-  5. Copy `arduino-temps.example.conf` to `arduino-temps.conf` and modify to suit your needs.
-  6. Start the Python script: `nohup python logger/arduino-temps.py > /dev/null 2>&1 &`
 
-#### Outdoor temperature logging
+### `logger` - Python Scripts for Logging Data
+
+The `logger` directory contains a variety of temperature logging scripts, written in Python, to assist with logging temperatures from DS18B20 1-Wire temperature sensors (connected via Raspberry Pi or Arduino), external APIs, and even the Nest learning thermostat.
+
+#### Logging with the Raspberry Pi and DS18B20
+
+**Connect the DS18B20 to your Pi**
+
+You can use a breadboard, a shield, a GPIO ribbon cable, or whatever, but you basically need to connect the following (this is using the waterproof sensor—follow diagrams found elsewhere for the small transistor-sized chip):
+
+  - 3V3 - Red wire
+  - Ground - Black wire
+  - GPIO 4 - Yellow wire (with 4.7K pull-up resistor between this and 3V3).
+
+The 3V3 and Ground wire can be connected to any 3.3V or Ground pin, respectively (follow [this great Raspberry Pi pinout diagram](http://pi.gadgetoid.com/pinout) for your model of Pi), but by default, the 1-Wire library uses GPIO pin 4, which is the 7th physical pin on a B+/A+/B rev 2.
+
+Next, you need to do a couple things to make sure the Pi can see the temperature sensor on the GPIO port:
+
+  1. Edit `/etc/modules` and add the following lines:
+      ```
+      w1-gpio
+      w1-therm
+      ```
+  2. *If you're using the Jan 30, 2015 image of Raspbian*: Edit `/boot/config.txt` and add the configuration line `dtoverlay=w1-gpio`. See [this forum topic](http://www.raspberrypi.org/forums/viewtopic.php?f=37&t=98407) for more info.
+  3. Reboot your Raspberry Pi.
+
+To test whether the DS18B20 is working, you can `cd` into `/sys/bus/w1/devices`. `ls` the contents, and you should see a directory like `28-xxxxxxx`, one directory per connected sensor. `cd` into that directory, then `cat w1_slave`, and you should see some output, with a value like `t=23750` at the end. This is the temperature value. Divide by 1,000 and you have the value in °C.
+
+**Log temperatures with `pi-temps.py`**
+
+(All commands run from project root directory).
+
+  1. Install Python logger app dependencies:
+    a. `sudo apt-get install python-pip python-dev`
+    b. `sudo pip install -r logger/requirements.txt`
+  2. Copy `pi-temps.example.conf` to `pi-temps.conf` and modify to suit your needs.
+  3. Start the Python script: `nohup python logger/pi-temps.py > /dev/null 2>&1 &`
+
+TODO - This section might need some cleanup!
+
+#### Logging with the Arduino and DS18B20
+
+**Connect the DS18B20 to your Arduino**
+
+You can use a breadboard, a shield, a GPIO ribbon cable, or whatever, but you basically need to connect the following (this is using the waterproof sensor—follow diagrams found elsewhere for the small transistor-sized chip):
+
+  - 3.3v - Red wire
+  - GND - Black wire
+  - Pin 2 (Digital) - Yellow wire (with 4.7K pull-up resistor between this and 3V3).
+
+Finally, plug the Arduino into a computer or Raspberry Pi via USB (to provide power and to send the data back to the computer over a serial connection).
+
+**Log temperatures with `arduino-temps.py`**
+
+(All commands run from project root directory).
+
+  1. Install Python logger app dependencies:
+    a. `sudo apt-get install python-pip python-dev`
+    b. `sudo pip install -r logger/requirements.txt`
+  2. Copy `arduino-temps.example.conf` to `arduino-temps.conf` and modify to suit your needs.
+  3. Start the Python script: `nohup python logger/arduino-temps.py > /dev/null 2>&1 &`
+
+#### Outdoor temperature logging via Weather APIs
 
 There are multiple scripts for reading current local temperatures via online weather APIs:
 
@@ -72,7 +131,7 @@ Notes:
   - If you are need to set WU API settings in your environment, you can create a file that exports the required variables in `~/.wu_api` (with your `PATH` set as well), then add `. $HOME/.wu_api;` before the `python` call in the cron job.
   - If you need to diagnose cron issues, install `postfix` using `sudo apt-get install -y postfix`, and remove the ` > /dev/null 2>&1` from the end of the line in the cron job.
 
-#### Nest temperature logging
+#### Nest temperature logging via Nest API
 
 There is another script, `nest-temps.py`, which requires you to have a Nest Developer account for API access. More information inside that script for now, but basically, once you're configured, get an access token then find your nest thermostat ID. Add those as the environment variables:
 
