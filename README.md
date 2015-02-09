@@ -22,8 +22,6 @@ Start the Express app for Temperature display:
 
 ## Installation & Setup - Raspberry Pi-based Master
 
-
-
 First of all, you'll need an Arduino, breadboard, DS18x20 temperature probe (with three wires), a breadboard, a resistor, some jumper wires (or a board to solder everything together, if you desire the permanence), and a USB cable to hook up the Arduino to a Raspberry Pi or some other computer.
 
 For now, I'd recommend reading through the following guides for a step-by-step guide:
@@ -43,10 +41,10 @@ This project uses a MySQL database to store and retrieve historical temperature 
 
   1. Install MySQL: `sudo apt-get install mysql-client mysql-server`
   2. Start MySQL and make sure it's enabled on boot:
-    a. `sudo service mysql start`
-    b. `sudo update-rc.d mysql defaults`
+    1. `sudo service mysql start`
+    2. `sudo update-rc.d mysql defaults`
   3. Create the MySQL database for logging temperatures:
-    a. `mysql -u [user] -p[password] < setup/database/schema.sql`
+    1. `mysql -u [user] -p[password] < setup/database/schema.sql`
 
 ### `logger` - Python Scripts for Logging Data
 
@@ -81,8 +79,8 @@ To test whether the DS18B20 is working, you can `cd` into `/sys/bus/w1/devices`.
 (All commands run from project root directory).
 
   1. Install Python logger app dependencies:
-    a. `sudo apt-get install python-pip python-dev`
-    b. `sudo pip install -r logger/requirements.txt`
+    1. `sudo apt-get install python-pip python-dev`
+    2. `sudo pip install -r logger/requirements.txt`
   2. Copy `pi-temps.example.conf` to `pi-temps.conf` and modify to suit your needs.
   3. Start the Python script: `nohup python logger/pi-temps.py > /dev/null 2>&1 &`
 
@@ -105,8 +103,8 @@ Finally, plug the Arduino into a computer or Raspberry Pi via USB (to provide po
 (All commands run from project root directory).
 
   1. Install Python logger app dependencies:
-    a. `sudo apt-get install python-pip python-dev`
-    b. `sudo pip install -r logger/requirements.txt`
+    1. `sudo apt-get install python-pip python-dev`
+    2. `sudo pip install -r logger/requirements.txt`
   2. Copy `arduino-temps.example.conf` to `arduino-temps.conf` and modify to suit your needs.
   3. Start the Python script: `nohup python logger/arduino-temps.py > /dev/null 2>&1 &`
 
