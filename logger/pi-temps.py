@@ -3,6 +3,7 @@
 
 import os
 import glob
+import time
 from datetime import datetime
 import calendar
 import requests
@@ -30,11 +31,11 @@ def read_temp():
     return temp
 
 # Send temperature data to the data logger.
-def post_temp_to_dashboard(temp, time):
+def post_temp_to_dashboard(temp, timestamp):
     payload = {
         'sensor': config["sensor_id"],
         'temp': temp,
-        'time': time
+        'time': timestamp
     }
     post = requests.post(config["dashboard_uri"], data=payload)
 
@@ -49,10 +50,10 @@ while True:
     # Get current temperature and timestamp.
     temp = read_temp()
     date = datetime.utcnow()
-    time = calendar.timegm(date.utctimetuple())
+    timestamp = calendar.timegm(date.utctimetuple())
 
     # Post the data to the dashboard app.
-    post_temp_to_dashboard(temp, time)
+    post_temp_to_dashboard(temp, timestamp)
 
     # Wait 30s.
     sleep(30)
