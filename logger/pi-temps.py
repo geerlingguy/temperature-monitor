@@ -56,4 +56,4 @@ while True:
     post_temp_to_dashboard(temp, timestamp)
 
     # Wait 30s.
-    sleep(30)
+    time.sleep(30)
