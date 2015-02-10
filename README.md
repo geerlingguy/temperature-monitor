@@ -147,13 +147,13 @@ Notes:
 ### `dashboard` - Express App/API for Displaying and Adding Data
 
   1. Install Node.js and NPM ([guide](http://weworkweplay.com/play/raspberry-pi-nodejs/)):
-    a. `wget http://node-arm.herokuapp.com/node_latest_armhf.deb`
-    b. `sudo dpkg -i node_latest_armhf.deb`
-    c. (You may need to log out and log back in for Node.js to work correctly; confirm with `node -v`.)
+    1. `wget http://node-arm.herokuapp.com/node_latest_armhf.deb`
+    2. `sudo dpkg -i node_latest_armhf.deb`
+    3. (You may need to log out and log back in for Node.js to work correctly; confirm with `node -v`.)
   2. `cd` into `dashboard` directory.
   3. Install required dependencies with `npm install`.
   4. Run the app: `nohup ./bin/www > /dev/null 2>&1 &`
-    a. To run in debug mode, with output on the command line: `DEBUG=node:* ./bin/www`
+    1. To run in debug mode, with output on the command line: `DEBUG=node:* ./bin/www`
 
 You can then view a dashboard at `http://[raspberry-pi-ip]:3000/` (where `[raspberry-pi-ip]` is the IP address or domain name of your Raspberry Pi).
 
