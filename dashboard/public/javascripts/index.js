@@ -30,12 +30,12 @@ $(function() {
       $.plot("#temps", temp_data, {
         yaxis: {
           tickFormatter: function (v, axis) {
-            return v.toFixed(axis.tickDecimals) +"°F "
-          }
+            return v.toFixed(axis.tickDecimals) +"°F ";
+          },
         },
         xaxis: {
           mode: "time",
-          timeformat: "%I:%M:%S %p",
+          timeformat: "%I:%M %p",
           timezone: "browser",
           min: start * 1000,
           max: now * 1000
@@ -46,6 +46,14 @@ $(function() {
           position: "sw"
         },
         grid: {
+          markings: function (axes) {
+            var markings = [];
+            console.log(axes);
+            for (var y = Math.floor(axes.ymin); y < axes.ymax; y += 2) {
+              markings.push({yaxis: { from: y, to: y + 1 }});
+            }
+            return markings;
+          },
           margin: {
             right: 0,
             left: 30
