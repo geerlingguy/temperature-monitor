@@ -1,4 +1,8 @@
 #temps {
-  width: 80%;
+  width: 100%;
   height: 20em;
+}
+
+.loading {
+  background: #eee url("/images/loading.gif") no-repeat center;
 }

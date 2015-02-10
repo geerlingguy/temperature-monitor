@@ -23,6 +23,9 @@ $(function() {
         };
       }
 
+      // Remove 'loading' class from graph.
+      $('#temps').removeClass('loading');
+
       // Plot the temperatures on the graph.
       $.plot("#temps", temp_data, {
         yaxis: {
@@ -41,6 +44,12 @@ $(function() {
         legend: {
           show: true,
           position: "sw"
+        },
+        grid: {
+          margin: {
+            right: 0,
+            left: 30
+          }
         }
       });
     });
