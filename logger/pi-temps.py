@@ -43,5 +43,5 @@ while True:
     # Log data to command line.
     print "{0}, {1}".format(date, temp.rstrip())
 
-    # Wait 30s.
-    time.sleep(30)
+    # Wait [delay] seconds.
+    time.sleep(config["delay"])
