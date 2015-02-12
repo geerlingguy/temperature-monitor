@@ -9,5 +9,8 @@
 /logger/arduino-temps.conf
 /logger/pi-temps.conf
 
+# Python.
+*.pyc
+
 # Node.js.
 */node_modules/*
