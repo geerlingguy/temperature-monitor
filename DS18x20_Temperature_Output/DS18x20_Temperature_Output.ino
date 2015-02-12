@@ -17,7 +17,7 @@ void loop(void) {
   byte data[12];
   byte addr[8];
   float celsius, fahrenheit;
-  
+
   if ( !ds.search(addr)) {
     ds.reset_search();
     delay(250);
@@ -28,7 +28,7 @@ void loop(void) {
       Serial.println("CRC is not valid!");
       return;
   }
- 
+
   // the first ROM byte indicates which chip
   switch (addr[0]) {
     case 0x10:
