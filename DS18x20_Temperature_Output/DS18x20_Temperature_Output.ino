@@ -86,6 +86,6 @@ void loop(void) {
   Serial.print(fahrenheit);
   Serial.println("");
 
-  // 30s delay between readings (including earlier 1s delay).
-  delay(29000);
+  // 60s delay between readings (including earlier 1s delay).
+  delay(59000);
 }
