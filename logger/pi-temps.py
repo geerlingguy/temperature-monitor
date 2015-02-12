@@ -7,6 +7,7 @@ import time
 from datetime import datetime
 import calendar
 import requests
+from temp_api import postTempData
 
 # Import configuration from 'pi-temps.conf' file.
 config = {}

@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 import calendar
 import requests
+from temp_api import postTempData
 
 # Sensor ID for 'outdoor' sensor.
 sensor_id = 2
