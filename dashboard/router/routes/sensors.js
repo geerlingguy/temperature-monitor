@@ -25,9 +25,11 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
     var pool = req.pool;
 
-    // If a location is given, create a new sensor, and return the new ID.
-    if (typeof req.body.location !== 'undefined') {
+    // If a location and group are given, create new sensor and return it's ID.
+    if (typeof req.body.location !== 'undefined'
+          && typeof req.body.group !== 'undefined') {
         var location = req.body.location;
+        var group = req.body.group;
 
         // Validate the location.
         if (location.length > 128) {
@@ -35,9 +37,18 @@ router.post('/', function(req, res, next) {
             return;
         }
 
+        // Validate the group.
+        if (group.length > 32) {
+            res.status(400).json({ error: 'Group must be less than or equal to 32 characters.' });
+            return;
+        }
+
         // Define the SQL query.
         var sqlQuery = "INSERT INTO sensors SET ?";
-        var sqlPlaceholders = { "location": location };
+        var sqlPlaceholders = {
+            "location": location,
+            "group": group
+        };
 
         // Add the new sensor to the sensors table, return the new ID.
         pool.getConnection(function(err, connection) {
@@ -50,7 +61,7 @@ router.post('/', function(req, res, next) {
         });
     }
     else {
-        res.status(400).json({ error: 'location parameter missing in the body of the request.' });
+        res.status(400).json({ error: 'location and group parameters must be present in the body of the request.' });
     }
 });
 

@@ -3,6 +3,7 @@ USE `temperature_log`;
 CREATE TABLE IF NOT EXISTS `sensors` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `location` VARCHAR(128),
+  `group` VARCHAR(32),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE TABLE IF NOT EXISTS `temps` (
