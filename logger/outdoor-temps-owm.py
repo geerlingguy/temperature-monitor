@@ -36,17 +36,9 @@ if ('main' in data.keys()) and ('temp' in data['main'].keys()):
     temp_f = (temp_k * 9 / 5.0) - 459.67
     temp = "{0:.2f}".format(temp_f)
 
-    # Send data to our temperature logger.
-    payload = {
-        'sensor': sensor_id,
-        'temp': temp,
-        'time': time
-    }
-    post = requests.post(dashboard_uri, data=payload)
+    # Send data to temperature logger.
+    postTempData(sensor_id, temp, time, exit_on_error=True)
 
-    if post.status_code != requests.codes.ok:
-        print "Could not post data to dashboard app: " + post.json()['error']
-        exit(1)
 else:
     print "Could not retrieve data from Open Weather Map API."
     exit(1)

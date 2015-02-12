@@ -14,7 +14,7 @@ config_dir = os.path.dirname(os.path.abspath(__file__))
 execfile(config_dir + "/pi-temps.conf", config)
 
 # Read the temperature from a connected DS18B20 temperature sensor.
-def read_temp():
+def readTempFromGPIO():
     base_dir = '/sys/bus/w1/devices/'
     device_folder = glob.glob(base_dir + '28*')[0]
     device_file_path = device_folder + '/w1_slave'
@@ -30,30 +30,17 @@ def read_temp():
     temp = "{0:.2f}".format(temp_f)
     return temp
 
-# Send temperature data to the data logger.
-def post_temp_to_dashboard(temp, timestamp):
-    payload = {
-        'sensor': config["sensor_id"],
-        'temp': temp,
-        'time': timestamp
-    }
-    post = requests.post(config["dashboard_uri"], data=payload)
-
-    # Print error, but don't exit, if data couldn't be written.
-    if post.status_code != requests.codes.ok:
-        print "Could not post data to dashboard app: " + post.json()['error']
-
-    # Log data to command line.
-    print "{0}, {1}".format(date, temp.rstrip())
-
 while True:
     # Get current temperature and timestamp.
-    temp = read_temp()
+    temp = readTempFromGPIO()
     date = datetime.utcnow()
     timestamp = calendar.timegm(date.utctimetuple())
 
-    # Post the data to the dashboard app.
-    post_temp_to_dashboard(temp, timestamp)
+    # Send data to temperature logger.
+    postTempData(config["sensor_id"], temp, timestamp)
+
+    # Log data to command line.
+    print "{0}, {1}".format(date, temp.rstrip())
 
     # Wait 30s.
     time.sleep(30)

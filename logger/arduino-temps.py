@@ -5,7 +5,7 @@ import os
 import serial
 from datetime import datetime
 import calendar
-import requests
+from temp_api import postTempData
 
 # Import configuration from 'arduino-temps.conf' file.
 config = {}
@@ -18,17 +18,8 @@ def read(serial):
     date = datetime.utcnow()
     time = calendar.timegm(date.utctimetuple())
 
-    # Send data to our temperature logger.
-    payload = {
-        'sensor': config["sensor_id"],
-        'temp': temp,
-        'time': time
-    }
-    post = requests.post(config["dashboard_uri"], data=payload)
-
-    # Print error, but don't exit, if data couldn't be written.
-    if post.status_code != requests.codes.ok:
-        print "Could not post data to dashboard app: " + post.json()['error']
+    # Send data to temperature logger.
+    postTempData(config["sensor_id"], temp, time)
 
     # Log data to command line.
     print "{0}, {1}".format(date, temp.rstrip())

@@ -41,13 +41,8 @@ if ('current_observation' in data.keys()) and ('temp_f' in data['current_observa
     temp_f = data['current_observation']['temp_f']
     temp = "{0:.2f}".format(temp_f)
 
-    # Send data to our temperature logger.
-    payload = {
-        'sensor': sensor_id,
-        'temp': temp,
-        'time': time
-    }
-    post = requests.post(dashboard_uri, data=payload)
+    # Send data to temperature logger.
+    postTempData(sensor_id, temp, time, exit_on_error=True)
 
     if post.status_code != requests.codes.ok:
         print "Could not post data to dashboard app: " + post.json()['error']

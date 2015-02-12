@@ -26,6 +26,7 @@ import json
 from datetime import datetime
 import calendar
 import requests
+from temp_api import postTempData
 
 # Sensor ID for 'nest' sensor.
 sensor_id = 3
@@ -59,17 +60,9 @@ data = req.json()
 if ('ambient_temperature_f' in data.keys()):
     temp = "{0:.2f}".format(data['ambient_temperature_f'])
 
-    # Send data to our temperature logger.
-    payload = {
-        'sensor': sensor_id,
-        'temp': temp,
-        'time': time
-    }
-    post = requests.post(dashboard_uri, data=payload)
+    # Send data to temperature logger.
+    postTempData(sensor_id, temp, time, exit_on_error=True)
 
-    if post.status_code != requests.codes.ok:
-        print "Could not post data to dashboard app: " + post.json()['error']
-        exit(1)
 else:
     print "Could not retrieve temperature data from Nest API."
     exit(1)
