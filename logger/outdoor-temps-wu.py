@@ -45,9 +45,6 @@ if ('current_observation' in data.keys()) and ('temp_f' in data['current_observa
     # Send data to temperature logger.
     postTempData(sensor_id, temp, time, exit_on_error=True)
 
-    if post.status_code != requests.codes.ok:
-        print "Could not post data to dashboard app: " + post.json()['error']
-        exit(1)
 else:
     print "Could not retrieve data from Weather Underground API."
     exit(1)
