@@ -89,4 +89,3 @@ void loop(void) {
   // 30s delay between readings (including earlier 1s delay).
   delay(29000);
 }
-
