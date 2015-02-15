@@ -165,7 +165,7 @@ More documentation may be added, but here's a list of the relevant API endpoints
 
   - `/sensors`
     - `GET`: Returns a listing of all sensor data.
-    - `POST`: Send a POST request with a `location` parameter, and it will respond with a new sensor ID.
+    - `POST`: Send a POST request with a `location` (maximum 255 characters) and `group` (maximum 32 characters) parameter, and it will respond with a new sensor ID.
     - `DELETE`: Not yet implemented.
   - `/temps`
     - `POST`: Send a POST request with a `sensor`, `temp`, and `time` parameter, and it will respond with a new temperature record ID.
