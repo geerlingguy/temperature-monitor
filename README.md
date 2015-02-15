@@ -69,7 +69,7 @@ Next, you need to do a couple things to make sure the Pi can see the temperature
       w1-gpio
       w1-therm
       ```
-  2. *If you're using the Jan 30, 2015 image of Raspbian*: Edit `/boot/config.txt` and add the configuration line `dtoverlay=w1-gpio`. See [this forum topic](http://www.raspberrypi.org/forums/viewtopic.php?f=37&t=98407) for more info.
+  2. *If you're using the Jan 30, 2015 image of Raspbian*: Edit `/boot/config.txt` and add the configuration line `dtoverlay=w1-gpio`. See [this forum topic](http://www.raspberrypi.org/forums/viewtopic.php?f=37&t=98407) and [this FAQ](http://www.raspberrypi.org/forums/viewtopic.php?f=28&t=97314) for more info.
   3. Reboot your Raspberry Pi.
 
 To test whether the DS18B20 is working, you can `cd` into `/sys/bus/w1/devices`. `ls` the contents, and you should see a directory like `28-xxxxxxx`, one directory per connected sensor. `cd` into that directory, then `cat w1_slave`, and you should see some output, with a value like `t=23750` at the end. This is the temperature value. Divide by 1,000 and you have the value in °C.
