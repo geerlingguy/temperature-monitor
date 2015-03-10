@@ -117,26 +117,27 @@ It's customary to configure one of these outdoor temperature script via cron, so
 
 You can add a cron job to call this script and update the outdoor temperature by logging into your pi and editing the crontab (`crontab -e`). Add a line like the following:
 
-    * * * * * python /path/to/temperature-monitor/logger/outdoor-temps-[type].py > /dev/null 2>&1
+    * * * * * python /home/pi/temperature-monitor/logger/outdoor-temps-[type].py > /dev/null 2>&1
 
 (`[type]` should be changed to whichever particular API you want to use.)
 
 Notes:
 
   - Prior to logging outdoor temperatures, you should add a sensor and update the ID in `outdoor-temps.py` with this ID. See `dashboard`'s API documentation for more info.
-  - If you are need to set WU API settings in your environment, you can create a file that exports the required variables in `~/.wu_api` (with your `PATH` set as well), then add `. $HOME/.wu_api;` before the `python` call in the cron job.
+  - If you are need to set WU API settings in your environment, you can create a file that exports the required variables in `~/.wu_api` (with your `PATH` set as well—see example in Nest API section below), then add `. /home/pi/.wu_api;` before the `python` call in the cron job.
   - If you need to diagnose cron issues, install `postfix` using `sudo apt-get install -y postfix`, and remove the ` > /dev/null 2>&1` from the end of the line in the cron job.
 
 #### Nest temperature logging via Nest API
 
-There is another script, `nest-temps.py`, which requires you to have a Nest Developer account for API access. More information inside that script for now, but basically, once you're configured, get an access token then find your nest thermostat ID. Add those as the environment variables:
+There is another script, `nest-temps.py`, which requires you to have a Nest Developer account for API access. More information inside that script for now, but basically, once you're configured, get an access token then find your nest thermostat ID. Add the following to the file `~/.nest_api`:
 
-  - `NEST_ACCESS_TOKEN`
-  - `NEST_THERMOSTAT_ID`
+    export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH
+    export NEST_ACCESS_TOKEN=YOUR_TOKEN_HERE
+    export NEST_THERMOSTAT_ID=YOUR_THERMOSTAT_ID
 
 Then add a cron job like:
 
-    */5 * * * * . $HOME/.nest_api; python /path/to/temperature-monitor/logger/nest-temps.py > /dev/null 2>&1
+    */5 * * * * . /home/pi/.nest_api; python /home/pi/temperature-monitor/logger/nest-temps.py > /dev/null 2>&1
 
 Notes:
 
