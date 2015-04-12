@@ -14,7 +14,11 @@ execfile(config_dir + "/arduino-temps.conf", config)
 
 # Function to read line, write it to the dashboard, and print it to the screen.
 def read(serial):
-    temp = serial.readline()
+    temp_f = serial.readline()
+    # Adjust the temperature according to the configured offset.
+    temp_f_adjusted = temp_f + config["temp_offset"]
+    temp = "{0:.2f}".format(temp_f_adjusted)
+
     date = datetime.utcnow()
     time = calendar.timegm(date.utctimetuple())
 

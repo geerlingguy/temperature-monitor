@@ -28,7 +28,9 @@ def readTempFromGPIO():
     temp_data = temp_line.split(" ")[9]
     temp_c = float(temp_data[2:]) / 1000
     temp_f = temp_c * 9.0 / 5.0 + 32.0
-    temp = "{0:.2f}".format(temp_f)
+    # Adjust the temperature according to the configured offset.
+    temp_f_adjusted = temp_f + config["temp_offset"]
+    temp = "{0:.2f}".format(temp_f_adjusted)
     return temp
 
 while True:
