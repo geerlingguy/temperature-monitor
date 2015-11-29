@@ -2,16 +2,16 @@
 
 <img src="https://raw.githubusercontent.com/geerlingguy/temperature-monitor/master/dashboard/screenshot.png" alt="Temperature Monitoring Dashboard" />
 
-I wanted to monitor temperatures in my house in various locations, and I have a bunch of Raspberry Pis and temperature probes. Therefore I've created this project to power a network of temperature monitors in my own home. Hopefully you can find something useful in it for yourself!
+I've created this project to power a network of temperature and environmental monitors in my home.
 
-The overall architecture is based on using a bunch of Raspberry Pis—one central 'master' Pi that aggregates log data and displays it on a web-based dashboard, and as many 'remotes' that are placed anywhere and send log data back to the 'master'.
+The architecture uses one 'master' Pi to aggregate and display log data, and many 'remotes' place around a house to send log data back to the 'master'.
 
-I'd recommend either a model 2 B or a B+ for the master Pi, but you should use an A+ or Zero for the remote Pis, since they will ultimately use less energy (< 100 mA, vs. 200+ mA for the B+ or model 2 B) and they don't need to be plugged into a monitor, keyboard, or mouse.
+The master Pi should be a model 2 B or a B+, but you can use any Pi for the remotes. I use the A+ or Zero for remotes since they're cheap and use less power when running headless.
 
 Each Pi should already have:
 
-  - Raspbian on the microSD card
-  - Networking already configured (either wired LAN or WiFi via USB)
+  - Raspbian running on the microSD card, with `raspi-config` already completed.
+  - Networking configured (either wired LAN or WiFi via USB).
 
 You can set up the Raspberry Pis while connected to a monitor, or you can set them up over your network via SSH; I'm assuming you're using the command line in either case.
 
