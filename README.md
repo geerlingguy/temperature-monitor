@@ -35,7 +35,7 @@ Start the Express app for Temperature display:
 
 ## Installation & Setup - Raspberry Pi Master (Data Logger & Dashboard App)
 
-An Ansible playbook will build the master logger and dashboard Pi, installing all the requirements for the Python-based data logger and the Node.js-based dashboard app for viewing temperature data.
+An Ansible playbook will build the master logger and dashboard Pi, installing all the requirements for the Node.js-based data logger and dashboard app for viewing temperature data.
 
   1. Install Ansible on the Raspberry Pi.
   2. Install required Ansible roles by running `ansible-galaxy install -r requirements.txt` inside the `playbooks/master` directory.
@@ -82,24 +82,24 @@ To test whether the DS18B20 is working, you can `cd` into `/sys/bus/w1/devices`.
 
 (All commands run from project root directory).
 
-  1. Install Python logger app dependencies:
+  1. Install Python logger script dependencies:
     1. `sudo apt-get install python-pip python-dev`
-    2. `sudo pip install -r logger/requirements.txt`
+    2. `sudo pip install -r scripts/requirements.txt`
   2. Copy `pi-temps.example.conf` to `pi-temps.conf` and modify to suit your needs.
-  3. Start the Python script: `nohup python logger/pi-temps.py > /dev/null 2>&1 &`
+  3. Start the Python script: `nohup python scripts/pi-temps.py > /dev/null 2>&1 &`
 
 ### Outdoor temperature logging via Weather APIs
 
 There are multiple scripts for reading current local temperatures via online weather APIs:
 
-  - [Open Weather Map API](http://openweathermap.org/api), using `logger/outdoor-temps-owm.py`. (No signup required, rate limit not specified, but temperature data is only updated about every 15-30 minutes).
-  - [Weather Underground API](http://www.wunderground.com/weather/api/d/pricing.html), using `logger/outdoor-temps-wu.py`. This API requires a 'paid' account, but the free plan allows for 500 calls per day, up to 10/min. This would allow you to call the API via cron every 3 minutes, maximum. The data is more real-time, but you have to sign up for access and can't poll the service as often as OWM. You must set two environment variables, `WU_API_KEY` and `WU_LOCATION` (e.g. `MO/Saint_Louis`, to use this script.
+  - [Open Weather Map API](http://openweathermap.org/api), using `scripts/outdoor-temps-owm.py`. (No signup required, rate limit not specified, but temperature data is only updated about every 15-30 minutes).
+  - [Weather Underground API](http://www.wunderground.com/weather/api/d/pricing.html), using `scripts/outdoor-temps-wu.py`. This API requires a 'paid' account, but the free plan allows for 500 calls per day, up to 10/min. This would allow you to call the API via cron every 3 minutes, maximum. The data is more real-time, but you have to sign up for access and can't poll the service as often as OWM. You must set two environment variables, `WU_API_KEY` and `WU_LOCATION` (e.g. `MO/Saint_Louis`, to use this script.
 
 It's customary to configure one of these outdoor temperature script via cron, so you can have it run once every minute, every 5 minutes, or on some more limited schedule than your other sensors, to ensure API limits aren't reached. (Plus, that's a lot of HTTP traffic for the poor Raspberry Pi!).
 
 You can add a cron job to call this script and update the outdoor temperature by logging into your pi and editing the crontab (`crontab -e`). Add a line like the following:
 
-    * * * * * python /home/pi/temperature-monitor/logger/outdoor-temps-[type].py > /dev/null 2>&1
+    * * * * * python /home/pi/temperature-monitor/scripts/outdoor-temps-[type].py > /dev/null 2>&1
 
 (`[type]` should be changed to whichever particular API you want to use.)
 
@@ -119,7 +119,7 @@ There is another script, `nest-temps.py`, which requires you to have a Nest Deve
 
 Then add a cron job like:
 
-    */5 * * * * . /home/pi/.nest_api; python /home/pi/temperature-monitor/logger/nest-temps.py > /dev/null 2>&1
+    */5 * * * * . /home/pi/.nest_api; python /home/pi/temperature-monitor/scripts/nest-temps.py > /dev/null 2>&1
 
 Notes:
 
