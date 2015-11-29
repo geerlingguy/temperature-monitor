@@ -10,8 +10,9 @@ Vagrant.configure(2) do |config|
     vb.memory = "512"
   end
 
+  # TODO - Add second VM for remote-monitor server.
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = "setup/playbook.yml"
+    ansible.playbook = "playbooks/master/main.yml"
     ansible.sudo = true
   end
 end

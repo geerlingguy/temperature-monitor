@@ -2,16 +2,28 @@
 
 <img src="https://raw.githubusercontent.com/geerlingguy/temperature-monitor/master/dashboard/screenshot.png" alt="Temperature Monitoring Dashboard" />
 
-I've had an Arduino and Raspberry Pi sitting unused in a box for a couple years now. I decided to start playing around with temperature monitoring, to see if I could get some interesting data out of a bunch of cheap temperature sensors I bought, and experiment with ways to heat and cool the house more efficiently (someday incorporating zones and schedules that are more advanced than what my Nest can handle).
+I wanted to monitor temperatures in my house in various locations, and I have a bunch of Raspberry Pis and temperature probes. Therefore I've created this project to power a network of temperature monitors in my own home. Hopefully you can find something useful in it for yourself!
 
-I'll be experimenting with wired temperature probes, wireless (RF) probes, Nest API integration, and maybe some other stuff while I'm at it.
+The overall architecture is based on using a bunch of Raspberry Pis—one central 'master' Pi that aggregates log data and displays it on a web-based dashboard, and as many 'remotes' that are placed anywhere and send log data back to the 'master'.
+
+I'd recommend either a model 2 B or a B+ for the master Pi, but you should use an A+ or Zero for the remote Pis, since they will ultimately use less energy (< 100 mA, vs. 200+ mA for the B+ or model 2 B) and they don't need to be plugged into a monitor, keyboard, or mouse.
+
+Each Pi should already have:
+
+  - Raspbian on the microSD card
+  - Networking already configured (either wired LAN or WiFi via USB)
+
+You can set up the Raspberry Pis while connected to a monitor, or you can set them up over your network via SSH; I'm assuming you're using the command line in either case.
+
+This is a living project, so a lot of things will change while I experiment with making my monitoring more robust, more fully-featured, and eventually, more integrated with my smart thermostat and other environmental controls.
+
 
 ## Vagrant quickstart for hacking
 
 Set up the virtual machine:
 
   1. Install Vagrant, VirtualBox and Ansible.
-  2. `cd` into `setup` directory and run `ansible-galaxy install -r requirements.txt`.
+  2. `cd` into each of the directories inside `playbooks` and run `ansible-galaxy install -r requirements.txt`.
   3. `cd` back into this directory and run `vagrant up`.
 
 Start the Express app for Temperature display:
@@ -20,37 +32,29 @@ Start the Express app for Temperature display:
   2. Run the command `DEBUG=node:* ./bin/www`.
   3. You can now visit the dashboard at `http://192.168.33.2:3000/`.
 
-## Installation & Setup - Raspberry Pi-based Master
 
-First of all, you'll need an Arduino, breadboard, DS18x20 temperature probe (with three wires), a breadboard, a resistor, some jumper wires (or a board to solder everything together, if you desire the permanence), and a USB cable to hook up the Arduino to a Raspberry Pi or some other computer.
+## Installation & Setup - Raspberry Pi Master (Data Logger & Dashboard App)
 
-For now, I'd recommend reading through the following guides for a step-by-step guide:
+An Ansible playbook will build the master logger and dashboard Pi, installing all the requirements for the Python-based data logger and the Node.js-based dashboard app for viewing temperature data.
 
-  - [How to measure temperature with your Arduino and a DS18B20](http://www.tweaking4all.com/hardware/arduino/arduino-ds18b20-temperature-sensor/)
-  - [The Raspberry Pi and Wireless RF (XRF) Temperature Loggers](http://www.seanlandsman.com/2013/02/the-raspberry-pi-and-wireless-rf-xrf.html)
+  1. Install Ansible on the Raspberry Pi.
+  2. Install required Ansible roles by running `ansible-galaxy install -r requirements.txt` inside the `playbooks/master` directory.
+  3. Run the Ansible playbook to configure the master Pi: `playbooks/master/main.yml`
 
-This project contains an Arduino Uno sketch, `DS18x20_Temperature_Output.ino`, which tells a USB-connected Arduino Uno to read the temperature on a probe on pin 2 every 30s and output the temperature as a float (e.g. `72.25`) in fahrenheit.
 
-You need to have MySQL server installed and available (future versions of this project will configure everything for you, but for now, just get it going and either use the root account (not recommended) or set up a new user with access to the database defined by `schema.sql`).
+## Installation & Setup - Raspberry Pi Remotes (Temperature Monitors)
 
-### Setting up the MySQL database
+An Ansible playbook will build the remote temperature monitoring Pi(s), installing all the requirements for the Python-based temperature data collection scripts. It will also start the script and begin sending data to the logging endpoint on the Master Pi.
 
-This project uses a MySQL database to store and retrieve historical temperature data.
+  1. Install Ansible on the Raspberry Pi.
+  2. Install required Ansible roles by running `ansible-galaxy install -r requirements.txt` inside the `playbooks/remote-monitor` directory.
+  3. Run the Ansible playbook to configure the master Pi: `playbooks/remote-monitor/main.yml`
 
-(All commands run from project root directory).
+### `scripts` - Python Scripts for Logging Data
 
-  1. Install MySQL: `sudo apt-get install mysql-client mysql-server`
-  2. Start MySQL and make sure it's enabled on boot:
-    1. `sudo service mysql start`
-    2. `sudo update-rc.d mysql defaults`
-  3. Create the MySQL database for logging temperatures:
-    1. `mysql -u [user] -p[password] < setup/database/schema.sql`
+The `scripts` directory contains a variety of temperature logging scripts, written in Python, to assist with logging temperatures from DS18B20 1-Wire temperature sensors (connected via Raspberry Pi GPIO ports), external weather APIs, and even the Nest learning thermostat.
 
-### `logger` - Python Scripts for Logging Data
-
-The `logger` directory contains a variety of temperature logging scripts, written in Python, to assist with logging temperatures from DS18B20 1-Wire temperature sensors (connected via Raspberry Pi or Arduino), external APIs, and even the Nest learning thermostat.
-
-#### Logging with the Raspberry Pi and DS18B20
+### Connecting the Raspberry Pi to the DS18B20
 
 **Connect the DS18B20 to your Pi**
 
@@ -84,29 +88,7 @@ To test whether the DS18B20 is working, you can `cd` into `/sys/bus/w1/devices`.
   2. Copy `pi-temps.example.conf` to `pi-temps.conf` and modify to suit your needs.
   3. Start the Python script: `nohup python logger/pi-temps.py > /dev/null 2>&1 &`
 
-#### Logging with the Arduino and DS18B20
-
-**Connect the DS18B20 to your Arduino**
-
-You can use a breadboard, a shield, a GPIO ribbon cable, or whatever, but you basically need to connect the following (this is using the waterproof sensor—follow diagrams found elsewhere for the small transistor-sized chip):
-
-  - 3.3v - Red wire
-  - GND - Black wire
-  - Pin 2 (Digital) - Yellow wire (with 4.7K pull-up resistor between this and 3V3).
-
-Finally, plug the Arduino into a computer or Raspberry Pi via USB (to provide power and to send the data back to the computer over a serial connection).
-
-**Log temperatures with `arduino-temps.py`**
-
-(All commands run from project root directory).
-
-  1. Install Python logger app dependencies:
-    1. `sudo apt-get install python-pip python-dev`
-    2. `sudo pip install -r logger/requirements.txt`
-  2. Copy `arduino-temps.example.conf` to `arduino-temps.conf` and modify to suit your needs.
-  3. Start the Python script: `nohup python logger/arduino-temps.py > /dev/null 2>&1 &`
-
-#### Outdoor temperature logging via Weather APIs
+### Outdoor temperature logging via Weather APIs
 
 There are multiple scripts for reading current local temperatures via online weather APIs:
 
@@ -127,7 +109,7 @@ Notes:
   - If you are need to set WU API settings in your environment, you can create a file that exports the required variables in `~/.wu_api` (with your `PATH` set as well—see example in Nest API section below), then add `. /home/pi/.wu_api;` before the `python` call in the cron job.
   - If you need to diagnose cron issues, install `postfix` using `sudo apt-get install -y postfix`, and remove the ` > /dev/null 2>&1` from the end of the line in the cron job.
 
-#### Nest temperature logging via Nest API
+### Nest temperature logging via Nest API
 
 There is another script, `nest-temps.py`, which requires you to have a Nest Developer account for API access. More information inside that script for now, but basically, once you're configured, get an access token then find your nest thermostat ID. Add the following to the file `~/.nest_api`:
 
@@ -144,6 +126,12 @@ Notes:
   - Nest's API documentation suggests "To avoid errors, we recommend you limit requests to one call per minute, maximum.", and since every call requires the Nest to wake up to return data to Nest's API servers, it's best to be more conservative with this cron job.
   - The cron job above first pulls in the configuration in `~/.nest_api`. It's simplest to just create a file like that in your home folder with the two required environment variables exported and a `PATH` so the `python` executable works.
   - If you need to diagnose cron issues, install `postfix` using `sudo apt-get install -y postfix`, and remove the ` > /dev/null 2>&1` from the end of the line in the cron job.
+
+---
+
+**TODO** - The rest of this guide will be updated once all the Express app's configuration has been moved into the ansible playbook for the Master Pi.
+
+---
 
 ### `dashboard` - Express App/API for Displaying and Adding Data
 
@@ -181,9 +169,11 @@ The API returns the following HTTP Status Codes:
 
 An error message will also be returned in the body of the response.
 
+
 ## License
 
 MIT
+
 
 ## Author
 

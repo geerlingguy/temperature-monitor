@@ -1,0 +1,26 @@
+---
+- hosts: all
+
+  vars_files:
+    - vars.yml
+
+  roles: []
+
+  tasks:
+    - name: Install dependencies for Python logger.
+      apt: "name={{ item }} state=present"
+      with_items:
+        - python-pip
+        - python-dev
+
+    - name: Install required Python libraries with pip.
+      pip: requirements=/vagrant/scripts/requirements.txt
+
+    # TODO
+    - name: Create a local copy of the pi-temps.conf script.
+      command: true
+
+    # TODO
+    - name: Ensure the pi-temps.py script is active.
+      command: true
+      # command: "nohup python scripts/pi-temps.py > /dev/null 2>&1 &"

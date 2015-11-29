@@ -17,10 +17,18 @@
         - libmysqlclient-dev
 
     - name: Install required Python libraries with pip.
-      pip: requirements=/vagrant/logger/requirements.txt
+      pip: requirements=/vagrant/scripts/requirements.txt
 
     - name: Set up temperature logging database.
-      shell: "mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} < /vagrant/setup/database/{{ item }}"
+      shell: "mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} < /vagrant/playbooks/master/database/{{ item }}"
       with_items:
         - schema.sql
         - sample-data.sql
+
+    # TODO
+    - name: Set up node.js dashboard app.
+      command: true
+
+    # TODO
+    - name: Start up Python app.
+      command: true
