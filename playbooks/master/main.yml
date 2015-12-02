@@ -4,31 +4,14 @@
   vars_files:
     - vars.yml
 
+  pre_tasks:
+    - name: Ensure apt-transport-https is installed.
+      apt: name=apt-transport-https state=present
+
   roles:
     - geerlingguy.mysql
     - geerlingguy.nodejs
 
   tasks:
-    - name: Install dependencies for Python app.
-      apt: "name={{ item }} state=present"
-      with_items:
-        - python-pip
-        - python-dev
-        - libmysqlclient-dev
-
-    - name: Install required Python libraries with pip.
-      pip: requirements=/vagrant/scripts/requirements.txt
-
-    - name: Set up temperature logging database.
-      shell: "mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} < /vagrant/playbooks/master/database/{{ item }}"
-      with_items:
-        - schema.sql
-        - sample-data.sql
-
-    # TODO
-    - name: Set up node.js dashboard app.
-      command: true
-
-    # TODO
-    - name: Start up Python app.
-      command: true
+    - include: tasks/database.yml
+    - include: tasks/app.yml

@@ -1,7 +1,13 @@
 ---
-mysql_root_password: root
+# Temperature montior vars.
+temperature_monitor_dir: /vagrant
+
+# Node.js vars.
+nodejs_version: "0.12"
+nodejs_forever: true
 
 # Some defaults to make MySQL use less memory.
+mysql_root_password: root
 mysql_key_buffer_size: "16M"
 mysql_max_allowed_packet: "64M"
 mysql_table_open_cache: "128"

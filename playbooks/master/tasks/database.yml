@@ -1,0 +1,19 @@
+---
+- name: Check if database has already been configured.
+  stat: path=/etc/tempmon-db-configured
+  register: db_configured
+
+- name: Set up temperature logging database.
+  shell: >
+    mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} <
+    {{ temperature_monitor_dir }}/playbooks/master/database/{{ item }}
+  with_items:
+    - schema.sql
+    - sample-data.sql
+  when: db_configured.stat.exists == false
+
+- name: Save a file indicating databases have successfully been configured.
+  file:
+    path: /etc/tempmon-db-configured
+    state: touch
+    mode: 0644
