@@ -12,3 +12,9 @@
     forever start ./bin/www
     chdir={{ temperature_monitor_dir }}/dashboard
   when: "forever_list.stdout.find('bin/www') == -1"
+
+- name: Ensure cron job to start Dashboard app on boot is present.
+  cron:
+    name: "Start Temperature Monitor Dashboard app"
+    special_time: reboot
+    job: "cd {{ temperature_monitor_dir }}/dashboard && /usr/bin/forever start ./bin/www"

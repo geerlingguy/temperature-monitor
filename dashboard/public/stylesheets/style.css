@@ -1,3 +1,4 @@
+/* General styles */
 body {
   padding: 1em;
   font: 1em "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -9,4 +10,47 @@ h1, h2, h3, h4, h5, h6 {
 
 a {
   color: #00B7FF;
+}
+
+/* Latest Temperatures */
+#temperature-latest {
+  width: 100%;
+  overflow: hidden;
+}
+
+#temperature-latest .sensor {
+  text-align: center;
+  float: left;
+  background-color: #eee;
+  padding: .75em 2em 1em;
+  margin: 1em 2em 1.5em 0;
+}
+
+#temperature-latest .title {
+  font-size: .85em;
+}
+
+.temperature {
+  font-size: 1.8em;
+  margin-bottom: .25em;
+}
+
+.time {
+  font-size: .9em;
+}
+
+/* Temperature graph */
+#temperature-graph {
+  width: 100%;
+  height: 30em;
+}
+
+.loading {
+  background: #eee url("/images/loading.gif") no-repeat center;
+}
+
+.help-text {
+  font-size: .8em;
+  text-align: center;
+  margin-top: 3em;
 }

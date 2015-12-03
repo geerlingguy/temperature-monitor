@@ -2,13 +2,50 @@ var express = require('express');
 var router = express.Router();
 var async = require('async');
 
+/* GET temps latest. */
+/* Example: GET /temps/latest */
+router.get('/latest', function(req, res, next) {
+    var pool = req.pool;
+
+    // Values for query parameters.
+    var sqlQuery = "SELECT sensor, temp, MAX(time) AS time FROM temps GROUP BY sensor DESC";
+
+    // Get sensor data, and pass it along to temperature data query.
+    async.waterfall([
+        function(callback) {
+            pool.getConnection(function(err, connection) {
+                if (err) throw err;
+                connection.query("SELECT * FROM sensors", function(err, rows) {
+                    if (err) throw err;
+                    connection.release();
+                    var sensorData = {};
+                    for (var i = 0; i < rows.length; i++) {
+                        sensorData[rows[i]['id']] = rows[i]['location']
+                    };
+                    callback(null, sensorData);
+                });
+            });
+        },
+        function(sensorData, callback) {
+            pool.getConnection(function(err, connection) {
+                if (err) throw err;
+                connection.query(sqlQuery, function(err, rows) {
+                    if (err) throw err;
+                    var temperatureData = groupResultBySensor(rows, sensorData);
+                    connection.release();
+                    callback(null, temperatureData);
+                });
+            });
+        }
+    ], function(err, temperatureData) {
+        res.json(temperatureData);
+    });
+});
+
 /* GET temps route. */
 /* Example: GET /temps/1?startTime=123456 */
 router.get('/:id', function(req, res, next) {
     var pool = req.pool;
-
-    // TODO - Get sensor data synchronously?
-    var sensors = {};
 
     // Calculate the time 24h ago.
     var defaultTime = Math.round(new Date().getTime() / 1000) - (24 * 3600);
@@ -20,13 +57,13 @@ router.get('/:id', function(req, res, next) {
     // Get all sensor data.
     if (sensor === 'all') {
         // Define the SQL query.
-        var sqlQuery = "SELECT sensor,temp,time FROM temps WHERE time > ?";
+        var sqlQuery = "SELECT sensor,temp,time FROM temps WHERE time > ? ORDER BY time DESC";
         var sqlPlaceholders = [time];
     }
     // Get data for given sensor ID.
     else {
         // Define the SQL query.
-        var sqlQuery = "SELECT sensor,temp,time FROM temps WHERE sensor = ? AND time > ?";
+        var sqlQuery = "SELECT sensor,temp,time FROM temps WHERE sensor = ? AND time > ? ORDER BY time DESC";
         var sqlPlaceholders = [sensor, time];
     }
 
@@ -139,6 +176,28 @@ function groupResultsBySensor(array, sensorData) {
         "sensor_id": sensorId,
         "label": sensorData[sensorId],
         "data": groups[group]
+    };
+    return obj;
+  });
+}
+
+// Group one result per sensor
+function groupResultBySensor(array, sensorData) {
+  var groups = {};
+
+  array.forEach(function(o) {
+    var k = o['sensor'];
+    groups[k] = groups[k] || [];
+    groups[k].push(o);
+  });
+
+  return Object.keys(groups).map(function(group) {
+    var sensorId = groups[group][0]['sensor'];
+    var obj = {
+        "sensor_id": sensorId,
+        "label": sensorData[sensorId],
+        "temp": groups[group][0]['temp'],
+        "time": groups[group][0]['time']
     };
     return obj;
   });

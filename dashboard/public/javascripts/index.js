@@ -1,10 +1,10 @@
 $(function() {
 
-  // 30s refresh interval.
-  var refreshInterval = 30000;
+  // 60s refresh interval.
+  var refreshInterval = 60000;
 
   // Plot temperatures in Flot graph.
-  var refreshTemps = function() {
+  var refreshTemperatureGraph = function() {
     // Get time 24h ago.
     var now = Math.round(new Date().getTime() / 1000);
     var start = now - (24 * 3600);
@@ -24,10 +24,10 @@ $(function() {
       }
 
       // Remove 'loading' class from graph.
-      $('#temps').removeClass('loading');
+      $('#temperature-graph').removeClass('loading');
 
       // Plot the temperatures on the graph.
-      $.plot("#temps", temp_data, {
+      $.plot("#temperature-graph", temp_data, {
         yaxis: {
           tickFormatter: function (v, axis) {
             return v.toFixed(axis.tickDecimals) +"°F ";
@@ -63,10 +63,46 @@ $(function() {
     });
   }
 
-  // Load the graph on page load.
-  refreshTemps();
+  var refreshLatestTemps = function() {
+    $.getJSON('/temps/latest', function(data) {
+      var temp_data = [];
+      console.log(data);
 
-  // Refresh the page at a given interval.
-  var interval = window.setInterval(refreshTemps, refreshInterval);
+      $.each(data, function(index, value) {
+        // Set up the date.
+        var date = new Date();
+        date.setTime(value.time * 1000);
+        dateString = date.toTimeString().slice(0, 8);
 
+        // Set up the values.
+        var title = $('<h3>', {class: 'title'}).text(value.label)
+        var temp = $('<div>', {class: 'temperature'}).text(value.temp + '°F')
+        var time = $('<div>', {class: 'time'}).text('as of ' + dateString)
+
+        var sensorClass = 'sensor-' + value.sensor_id;
+        var sensorDiv = $('#temperature-latest > .' + sensorClass);
+        // If the sensor div exists, update the data inside.
+        if (sensorDiv.length) {
+          sensorDiv.empty().append(title, temp, time);
+        }
+        // Otherwise, create the div and populate the data.
+        else {
+          var sensorDivToAdd = $('<div>', {class: 'sensor ' + sensorClass}).append(title, temp, time);
+          $('#temperature-latest').append(sensorDivToAdd);
+        }
+      });
+
+      // Remove 'loading' class from latest temperature area.
+      $('#temperature-latest').removeClass('loading');
+    });
+  }
+
+  var loadData = function() {
+    refreshTemperatureGraph();
+    refreshLatestTemps();
+  }
+
+  // Load the initial data and set up an interval to reload it.
+  loadData();
+  var interval = window.setInterval(loadData, refreshInterval);
 });

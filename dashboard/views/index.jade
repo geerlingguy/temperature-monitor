@@ -1,6 +1,7 @@
 extends layout
 
 block content
-  h1= title
-  p Times are in your browser's timezone.
-  div#temps.loading
+  h1=title
+  div#temperature-latest.loading
+  div#temperature-graph.loading
+  p.help-text Times are in your browser's timezone.
