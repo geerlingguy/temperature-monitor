@@ -4,6 +4,10 @@
 # Vagrant.
 .vagrant
 
+# Configuration.
+config/config.yml
+config/inventory
+
 # App-specific files.
 *.log
 /logger/arduino-temps.conf

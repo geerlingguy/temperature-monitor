@@ -1,0 +1,3 @@
+---
+- include: playbooks/master/main.yml
+- include: playbooks/remote-monitor/main.yml

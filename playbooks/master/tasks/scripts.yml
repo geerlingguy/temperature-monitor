@@ -1,0 +1,14 @@
+---
+- name: Configure Nest API credentials.
+  template:
+    src: templates/nest_api.j2
+    dest: "/home/{{ temperature_monitor_user }}/.nest_api"
+    owner: "{{ temperature_monitor_user }}"
+  when: nest_access_token != ''
+
+- name: Configure Weather Underground credentials.
+  template:
+    src: templates/wu_api.j2
+    dest: "/home/{{ temperature_monitor_user }}/.wu_api"
+    owner: "{{ temperature_monitor_user }}"
+  when: wu_api_key != ''

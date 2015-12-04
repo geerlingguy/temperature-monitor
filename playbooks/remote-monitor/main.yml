@@ -1,8 +1,8 @@
 ---
-- hosts: all
+- hosts: remotes
 
   vars_files:
-    - vars.yml
+    - ../../config/config.yml
 
   roles: []
 

@@ -1,12 +1,15 @@
 ---
-# Temperature montior vars.
+# Whether this playbook is targeting an actual Pi or a non-Pi environment.
+deploy_target_is_pi: true
+
+# The directory inside which the temperature-monitor repository should be.
 temperature_monitor_dir: /vagrant
 
-# Node.js vars.
+# Node.js vars. Used only for the dashboard/master server.
 nodejs_version: "0.12"
 nodejs_forever: true
 
-# Some defaults to make MySQL use less memory.
+# MySQL vars. Used only for the dashboard/master server.
 mysql_root_password: root
 mysql_key_buffer_size: "16M"
 mysql_max_allowed_packet: "64M"
@@ -24,3 +27,11 @@ mysql_innodb_additional_mem_pool_size: "4M"
 mysql_innodb_log_file_size: "16M"
 mysql_innodb_log_buffer_size: "2M"
 mysql_innodb_flush_log_at_trx_commit: "1"
+
+# Nest credentials (if empty, will not be used).
+nest_access_token: ""
+nest_thermostat_id: ""
+
+# Weather Underground credentials (if empty, will not be used).
+wu_api_key: ""
+wu_location: "MO/Saint_Louis"

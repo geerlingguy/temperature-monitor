@@ -1,8 +1,8 @@
 ---
-- hosts: all
+- hosts: master
 
   vars_files:
-    - vars.yml
+    - ../../config/config.yml
 
   pre_tasks:
     - name: Ensure apt-transport-https is installed.
@@ -13,5 +13,13 @@
     - geerlingguy.nodejs
 
   tasks:
+    - name: Ensure the temperature-monitor repository is present.
+      git:
+        repo: https://github.com/geerlingguy/temperature-monitor.git
+        dest: "{{ temperature_monitor_dir }}"
+        update: yes
+      when: deploy_target_is_pi
+
     - include: tasks/database.yml
     - include: tasks/app.yml
+    - include: tasks/scripts.yml
