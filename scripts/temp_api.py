@@ -4,7 +4,7 @@
 import requests
 
 # The URI of the dashboard app.
-dashboard_uri = "http://geerpi:3000/temps"
+dashboard_uri = "http://10.0.1.33:3000/temps"
 
 # Post temperature sensor data to dashboard app.
 def postTempData(sensor_id, temp, time, exit_on_error=False):

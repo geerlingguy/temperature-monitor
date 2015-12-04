@@ -99,9 +99,9 @@ It's customary to configure one of these outdoor temperature script via cron, so
 
 You can add a cron job to call this script and update the outdoor temperature by logging into your pi and editing the crontab (`crontab -e`). Add a line like the following:
 
-    * * * * * python /home/pi/temperature-monitor/scripts/outdoor-temps-[type].py > /dev/null 2>&1
+    * * * * * . /home/pi/.[type]_api; python /home/pi/temperature-monitor/scripts/outdoor-temps-[type].py > /dev/null 2>&1
 
-(`[type]` should be changed to whichever particular API you want to use.)
+`[type]` should be changed to whichever particular API you want to use, and the first part refers to a service-specific environment file inside which you can define necessary environment variables (e.g. `WU_API_KEY` and `WU_LOCATION`).
 
 Notes:
 

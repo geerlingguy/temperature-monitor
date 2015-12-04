@@ -22,17 +22,20 @@
 #   - https://developer.nest.com/clients
 
 import os
+import glob
 import json
 from datetime import datetime
 import calendar
 import requests
 from temp_api import postTempData
 
-# Sensor ID for 'nest' sensor.
-sensor_id = 3
+# Import configuration from 'temps.conf' file.
+config = {}
+config_dir = os.path.dirname(os.path.abspath(__file__))
+execfile(config_dir + "/temps.conf", config)
 
-# URI for temps callback on host running the dashboard app.
-dashboard_uri = 'http://geerpi:3000/temps'
+# Sensor ID for 'nest' sensor.
+nest_sensor_id = 3
 
 # Read Nest information from the environment.
 try:
@@ -61,7 +64,7 @@ if ('ambient_temperature_f' in data.keys()):
     temp = "{0:.2f}".format(data['ambient_temperature_f'])
 
     # Send data to temperature logger.
-    postTempData(sensor_id, temp, time, exit_on_error=True)
+    postTempData(config["nest_sensor_id"], temp, time, exit_on_error=True)
 
 else:
     print "Could not retrieve temperature data from Nest API."

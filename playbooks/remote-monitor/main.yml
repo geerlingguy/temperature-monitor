@@ -7,17 +7,24 @@
   roles: []
 
   tasks:
-    - name: Install dependencies for Python logger.
+    - name: Install dependencies for Python temperature scripts.
       apt: "name={{ item }} state=present"
       with_items:
         - python-pip
         - python-dev
 
+    - name: Ensure the temperature-monitor repository is present.
+      git:
+        repo: https://github.com/geerlingguy/temperature-monitor.git
+        dest: "{{ temperature_monitor_dir }}"
+        update: yes
+      when: deploy_target_is_pi
+
     - name: Install required Python libraries with pip.
-      pip: requirements=/vagrant/scripts/requirements.txt
+      pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
 
     # TODO
-    - name: Create a local copy of the pi-temps.conf script.
+    - name: Create a local copy of the temps.conf script.
       command: true
 
     # TODO

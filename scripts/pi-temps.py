@@ -9,10 +9,10 @@ import calendar
 import requests
 from temp_api import postTempData
 
-# Import configuration from 'pi-temps.conf' file.
+# Import configuration from 'temps.conf' file.
 config = {}
 config_dir = os.path.dirname(os.path.abspath(__file__))
-execfile(config_dir + "/pi-temps.conf", config)
+execfile(config_dir + "/temps.conf", config)
 
 # Read the temperature from a connected DS18B20 temperature sensor.
 def readTempFromGPIO():
@@ -40,7 +40,7 @@ while True:
     timestamp = calendar.timegm(date.utctimetuple())
 
     # Send data to temperature logger.
-    postTempData(config["sensor_id"], temp, timestamp)
+    postTempData(config["local_sensor_id"], temp, timestamp)
 
     # Log data to command line.
     print "{0}, {1}".format(date, temp.rstrip())

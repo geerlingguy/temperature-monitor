@@ -12,6 +12,7 @@ config/inventory
 *.log
 /logger/arduino-temps.conf
 /logger/pi-temps.conf
+/scripts/temps.conf
 
 # Python.
 *.pyc

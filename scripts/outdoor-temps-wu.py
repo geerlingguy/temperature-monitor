@@ -2,17 +2,17 @@
 # @author Jeff Geerling, 2015.
 
 import os
+import glob
 import json
 from datetime import datetime
 import calendar
 import requests
 from temp_api import postTempData
 
-# Sensor ID for 'outdoor' sensor.
-sensor_id = 2
-
-# URI for temps callback on host running the dashboard app.
-dashboard_uri = 'http://geerpi:3000/temps'
+# Import configuration from 'temps.conf' file.
+config = {}
+config_dir = os.path.dirname(os.path.abspath(__file__))
+execfile(config_dir + "/temps.conf", config)
 
 # Read Weather Underground API key from the environment.
 try:
@@ -43,7 +43,7 @@ if ('current_observation' in data.keys()) and ('temp_f' in data['current_observa
     temp = "{0:.2f}".format(temp_f)
 
     # Send data to temperature logger.
-    postTempData(sensor_id, temp, time, exit_on_error=True)
+    postTempData(config["wu_sensor_id"], temp, time, exit_on_error=True)
 
 else:
     print "Could not retrieve data from Weather Underground API."
