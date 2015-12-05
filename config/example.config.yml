@@ -2,8 +2,19 @@
 # Whether this playbook is targeting an actual Pi or a non-Pi environment.
 deploy_target_is_pi: true
 
-# The directory inside which the temperature-monitor repository should be.
-temperature_monitor_dir: /vagrant
+# Temperature monitor app variables.
+temperature_monitor_dir: /home/pi/temperature-monitor
+temperature_monitor_user: pi
+
+# Dashboard and sensor configuration.
+dashboard_uri: http://10.0.1.33:3000
+local_temp_read_delay: 60
+local_temp_offset: 0
+local_sensor_id: 1
+nest_sensor_id: 3
+wu_sensor_id: 2
+owm_sensor_id: 2
+owm_city_id: "4407084"
 
 # Node.js vars. Used only for the dashboard/master server.
 nodejs_version: "0.12"

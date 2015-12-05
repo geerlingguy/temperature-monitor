@@ -28,7 +28,8 @@ Vagrant.configure(2) do |config|
       ansible.extra_vars = {
         deploy_target_is_pi: false,
         temperature_monitor_dir: '/vagrant',
-        temperature_monitor_user: 'vagrant'
+        temperature_monitor_user: 'vagrant',
+        dashboard_uri: 'http://localhost:3000'
       }
       ansible.groups = inventory_groups
     end
