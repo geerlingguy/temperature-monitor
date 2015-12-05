@@ -34,9 +34,6 @@ config = {}
 config_dir = os.path.dirname(os.path.abspath(__file__))
 execfile(config_dir + "/temps.conf", config)
 
-# Sensor ID for 'nest' sensor.
-nest_sensor_id = 3
-
 # Read Nest information from the environment.
 try:
     nest_access_token = os.environ['NEST_ACCESS_TOKEN']

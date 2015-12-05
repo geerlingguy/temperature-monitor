@@ -1,10 +1,17 @@
 # Temperature Dashboard API integration.
 # @author Jeff Geerling, 2015.
 
+import os
+import glob
 import requests
 
+# Import configuration from 'temps.conf' file.
+config = {}
+config_dir = os.path.dirname(os.path.abspath(__file__))
+execfile(config_dir + "/temps.conf", config)
+
 # The URI of the dashboard app.
-dashboard_uri = "http://10.0.1.33:3000/temps"
+dashboard_uri = config["dashboard_uri"] + "/temps"
 
 # Post temperature sensor data to dashboard app.
 def postTempData(sensor_id, temp, time, exit_on_error=False):

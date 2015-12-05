@@ -1,27 +1,25 @@
 # Outdoor temperature logging script - Open Weather Map.
 # @author Jeff Geerling, 2015.
 
+import os
+import glob
 import json
 from datetime import datetime
 import calendar
 import requests
 from temp_api import postTempData
 
-# Sensor ID for 'outdoor' sensor.
-sensor_id = 2
-
-# URI for temps callback on host running the dashboard app.
-dashboard_uri = 'http://geerpi:3000/temps'
-
-# Open Weather Map city ID.
-city_id = '4407084'
+# Import configuration from 'temps.conf' file.
+config = {}
+config_dir = os.path.dirname(os.path.abspath(__file__))
+execfile(config_dir + "/temps.conf", config)
 
 # Current time (UNIX timestamp).
 date = datetime.utcnow()
 time = calendar.timegm(date.utctimetuple())
 
 # Current temperature.
-uri = 'http://api.openweathermap.org/data/2.5/weather?id=' + city_id
+uri = 'http://api.openweathermap.org/data/2.5/weather?id=' + config['owm_city_id']
 req = requests.get(uri)
 
 if req.status_code != requests.codes.ok:
@@ -38,7 +36,7 @@ if ('main' in data.keys()) and ('temp' in data['main'].keys()):
     temp = "{0:.2f}".format(temp_f)
 
     # Send data to temperature logger.
-    postTempData(sensor_id, temp, time, exit_on_error=True)
+    postTempData(config["owm_sensor_id"], temp, time, exit_on_error=True)
 
 else:
     print "Could not retrieve data from Open Weather Map API."
