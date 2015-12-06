@@ -23,9 +23,11 @@
     - name: Install required Python libraries with pip.
       pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
 
-    # TODO
-    - name: Create a local copy of the temps.conf script.
-      command: true
+    - name: Configure the settings file (temps.conf).
+      template:
+        src: ../master/templates/temps.conf.j2
+        dest: "{{ temperature_monitor_dir }}/scripts/temps.conf"
+        mode: 0644
 
     # TODO
     - name: Ensure the pi-temps.py script is active.

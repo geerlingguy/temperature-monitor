@@ -16,11 +16,13 @@
 - name: Ensure cron job exists for Nest temperatures.
   cron:
     name: "Check Nest Thermostat temperatures"
-    job: ". /home/pi/.wu_api; python {{ temperature_monitor_dir }}/scripts/outdoor-temps-wu.py > /dev/null 2>&1"
+    job: ". /home/{{ temperature_monitor_user }}/.wu_api; python {{ temperature_monitor_dir }}/scripts/outdoor-temps-wu.py > /dev/null 2>&1"
+    user: "{{ temperature_monitor_user }}"
   when: nest_access_token != ''
 
 - name: Ensure cron job exists for Weather Underground temperatures.
   cron:
     name: "Check Weather Underground temperatures"
-    job: ". /home/pi/.nest_api; python {{ temperature_monitor_dir }}/scripts/nest-temps.py > /dev/null 2>&1"
+    job: ". /home/{{ temperature_monitor_user }}/.nest_api; python {{ temperature_monitor_dir }}/scripts/nest-temps.py > /dev/null 2>&1"
+    user: "{{ temperature_monitor_user }}"
   when: wu_api_key != ''

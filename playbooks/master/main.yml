@@ -20,6 +20,11 @@
         update: yes
       when: deploy_target_is_pi
 
+    - name: Configure the settings file (temps.conf).
+      template:
+        src: templates/temps.conf.j2
+        dest: "{{ temperature_monitor_dir }}/scripts/temps.conf"
+
     - include: tasks/database.yml
     - include: tasks/app.yml
     - include: tasks/scripts.yml

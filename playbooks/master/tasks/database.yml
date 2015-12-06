@@ -3,14 +3,17 @@
   stat: path=/etc/tempmon-db-configured
   register: db_configured
 
-- name: Set up temperature logging database.
+- name: Configure the temperature logging database.
   shell: >
     mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} <
-    {{ temperature_monitor_dir }}/dashboard/database/{{ item }}
-  with_items:
-    - "schema.sql"
-    - "sample-data.sql"
+    {{ temperature_monitor_dir }}/dashboard/database/schema.sql
   when: db_configured.stat.exists == false
+
+- name: Add sample data to the database.
+  shell: >
+    mysql -u {{ mysql_root_username }} -p{{ mysql_root_password }} <
+    {{ temperature_monitor_dir }}/dashboard/database/sample-data.sql
+  when: deploy_target_is_pi == false and db_configured.stat.exists == false
 
 - name: Save a file indicating databases have successfully been configured.
   file:

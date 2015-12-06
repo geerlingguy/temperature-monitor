@@ -1,9 +1,9 @@
 USE `temperature_log`;
 
 -- Add sensors.
-INSERT INTO sensors VALUES(NULL,'Room A','indoor');
-INSERT INTO sensors VALUES(NULL,'Room B','indoor');
-INSERT INTO sensors VALUES(NULL,'Room C','indoor');
+INSERT INTO sensors VALUES(NULL,'Front Bedroom','indoor');
+INSERT INTO sensors VALUES(NULL,'Master Bedroom','indoor');
+INSERT INTO sensors VALUES(NULL,'Outside','outdoor');
 
 -- Add temps for first sensor.
 INSERT INTO temps VALUES(NULL,1,67.85,UNIX_TIMESTAMP(NOW() - INTERVAL 10 HOUR));
