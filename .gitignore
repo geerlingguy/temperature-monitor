@@ -7,12 +7,11 @@
 # Configuration.
 config/config.yml
 config/inventory
+/config/host-vars
 
 # App-specific files.
 *.log
-/logger/arduino-temps.conf
-/logger/pi-temps.conf
-/scripts/temps.conf
+scripts/temps.conf
 
 # Python.
 *.pyc

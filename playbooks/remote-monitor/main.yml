@@ -29,7 +29,11 @@
         dest: "{{ temperature_monitor_dir }}/scripts/temps.conf"
         mode: 0644
 
-    # TODO
-    - name: Ensure the pi-temps.py script is active.
-      command: true
-      # command: "nohup python scripts/pi-temps.py > /dev/null 2>&1 &"
+    - name: Configure the init file.
+      template:
+        src: templates/pi-temps-init.j2
+        dest: "/etc/init.d/pi-temps"
+        mode: 0755
+
+    - name: Ensure the pi-temps service is active and enabled on boot.
+      service: name=pi-temps state=started enabled=yes
