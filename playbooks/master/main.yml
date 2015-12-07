@@ -1,24 +1,38 @@
 ---
 - hosts: master
+  sudo: yes
 
   vars_files:
     - ../../config/config.yml
 
   pre_tasks:
+    - name: Ensure apt cache is updated.
+      apt: update_cache=yes cache_valid_time=86400
+
     - name: Ensure apt-transport-https is installed.
       apt: name=apt-transport-https state=present
 
   roles:
+    - geerlingguy.git
     - geerlingguy.mysql
     - geerlingguy.nodejs
 
   tasks:
+    - name: Install dependencies for Python temperature scripts.
+      apt: "name={{ item }} state=present"
+      with_items:
+        - python-pip
+        - python-dev
+
     - name: Ensure the temperature-monitor repository is present.
       git:
         repo: https://github.com/geerlingguy/temperature-monitor.git
         dest: "{{ temperature_monitor_dir }}"
         update: yes
       when: deploy_target_is_pi
+
+    - name: Install required Python libraries with pip.
+      pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
 
     - name: Configure the settings file (temps.conf).
       template:

@@ -1,10 +1,16 @@
 ---
 - hosts: remotes
+  sudo: yes
 
   vars_files:
     - ../../config/config.yml
 
-  roles: []
+  pre_tasks:
+    - name: Ensure apt cache is updated.
+      apt: update_cache=yes cache_valid_time=86400
+
+  roles:
+    - geerlingguy.git
 
   tasks:
     - name: Install dependencies for Python temperature scripts.
@@ -12,6 +18,9 @@
       with_items:
         - python-pip
         - python-dev
+
+    - name: Clean up bad Python requests package so pip works.
+      shell: "rm -rf /usr/local/lib/python2.7/dist-packages/requests*"
 
     - name: Ensure the temperature-monitor repository is present.
       git:

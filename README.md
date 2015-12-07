@@ -37,18 +37,17 @@ Start the Express app for Temperature display:
 
 An Ansible playbook will build the master logger and dashboard Pi, installing all the requirements for the Node.js-based data logger and dashboard app for viewing temperature data.
 
-  1. Install Ansible on the Raspberry Pi.
-  2. Install required Ansible roles by running `ansible-galaxy install -r requirements.txt` inside the `playbooks/master` directory.
-  3. Run the Ansible playbook to configure the master Pi: `playbooks/master/main.yml`
+  1. Install required Ansible roles by running `ansible-galaxy install -r requirements.txt` inside the `playbooks/master` directory.
+  2. Run the Ansible playbook to configure the master Pi: `ansible-playbook -i config/inventory playbooks/master/main.yml`
 
 
 ## Installation & Setup - Raspberry Pi Remotes (Temperature Monitors)
 
 An Ansible playbook will build the remote temperature monitoring Pi(s), installing all the requirements for the Python-based temperature data collection scripts. It will also start the script and begin sending data to the logging endpoint on the Master Pi.
 
-  1. Install Ansible on the Raspberry Pi.
+  1. Add a file named after the hostname or IP address of the Raspberry Pi inside `config/host_vars` (e.g. if the Pi's IP is 10.0.1.34, then add a host_vars file named `10.0.1.34` and put overrides inside, like the `local_sensor_id` for that Pi).
   2. Install required Ansible roles by running `ansible-galaxy install -r requirements.txt` inside the `playbooks/remote-monitor` directory.
-  3. Run the Ansible playbook to configure the master Pi: `playbooks/remote-monitor/main.yml`
+  3. Run the Ansible playbook to configure the master Pi: `ansible-playbook -i config/inventory playbooks/remote-monitor/main.yml`
 
 ### `scripts` - Python Scripts for Logging Data
 
