@@ -21,25 +21,25 @@
 
     - name: Clean up bad Python requests package so pip works.
       shell: "rm -rf /usr/local/lib/python2.7/dist-packages/requests*"
+      changed_when: false
 
     - name: Ensure the temperature-monitor repository is present.
       git:
         repo: https://github.com/geerlingguy/temperature-monitor.git
         dest: "{{ temperature_monitor_dir }}"
         update: yes
+      become: true
+      become_user: "{{ temperature_monitor_user }}"
       when: deploy_target_is_pi
 
     - name: Install required Python libraries with pip.
       pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
 
-    - debug: var=local_sensor_id
-      tags: ['testme']
     - name: Configure the settings file (temps.conf).
       template:
         src: ../master/templates/temps.conf.j2
         dest: "{{ temperature_monitor_dir }}/scripts/temps.conf"
         mode: 0644
-      tags: ['testme']
 
     - name: Configure the init file.
       template:
