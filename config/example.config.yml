@@ -6,7 +6,8 @@ deploy_target_is_pi: true
 temperature_monitor_dir: /home/pi/temperature-monitor
 temperature_monitor_user: pi
 
-# Dashboard and sensor configuration.
+# Dashboard and sensor configuration. Make sure you *remove* any variables here
+# if you want to be able to override the variables per-host in host_vars.
 dashboard_uri: http://10.0.1.33:3000
 local_temp_read_delay: 60
 local_temp_offset: 0

@@ -32,11 +32,14 @@
     - name: Install required Python libraries with pip.
       pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
 
+    - debug: var=local_sensor_id
+      tags: ['testme']
     - name: Configure the settings file (temps.conf).
       template:
         src: ../master/templates/temps.conf.j2
         dest: "{{ temperature_monitor_dir }}/scripts/temps.conf"
         mode: 0644
+      tags: ['testme']
 
     - name: Configure the init file.
       template:

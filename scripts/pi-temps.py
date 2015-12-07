@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Raspberry Pi temperature logging script.
 # @author Jeff Geerling, 2015.
 
