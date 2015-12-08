@@ -31,6 +31,7 @@
       become: true
       become_user: "{{ temperature_monitor_user }}"
       when: deploy_target_is_pi
+      notify: restart pi-temps
 
     - name: Install required Python libraries with pip.
       pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
@@ -40,12 +41,18 @@
         src: ../master/templates/temps.conf.j2
         dest: "{{ temperature_monitor_dir }}/scripts/temps.conf"
         mode: 0644
+      notify: restart pi-temps
 
     - name: Configure the init file.
       template:
         src: templates/pi-temps-init.j2
         dest: "/etc/init.d/pi-temps"
         mode: 0755
+      notify: restart pi-temps
 
     - name: Ensure the pi-temps service is active and enabled on boot.
       service: name=pi-temps state=started enabled=yes
+
+  handlers:
+    - name: restart pi-temps
+      service: name=pi-temps state=restarted

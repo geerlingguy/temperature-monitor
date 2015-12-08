@@ -30,6 +30,7 @@
         dest: "{{ temperature_monitor_dir }}"
         update: yes
       when: deploy_target_is_pi
+      notify: restart pi-temps
 
     - name: Install required Python libraries with pip.
       pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
@@ -38,7 +39,12 @@
       template:
         src: templates/temps.conf.j2
         dest: "{{ temperature_monitor_dir }}/scripts/temps.conf"
+      notify: restart pi-temps
 
     - include: tasks/database.yml
     - include: tasks/app.yml
     - include: tasks/scripts.yml
+
+  handlers:
+    - name: restart pi-temps
+      service: name=pi-temps state=restarted
