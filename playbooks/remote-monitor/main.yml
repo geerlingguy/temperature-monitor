@@ -11,6 +11,7 @@
 
   roles:
     - geerlingguy.git
+    - geerlingguy.raspberry-pi
 
   tasks:
     - name: Install dependencies for Python temperature scripts.

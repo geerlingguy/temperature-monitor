@@ -16,6 +16,7 @@
     - geerlingguy.git
     - geerlingguy.mysql
     - geerlingguy.nodejs
+    - geerlingguy.raspberry-pi
 
   tasks:
     - name: Install dependencies for Python temperature scripts.

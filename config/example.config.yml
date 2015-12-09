@@ -17,6 +17,24 @@ wu_sensor_id: 2
 owm_sensor_id: 2
 owm_city_id: "4407084"
 
+# Raspberry Pi configuration.
+raspberry_pi_boot_config_options:
+  # Set the GPU memory split value to conserve system RAM.
+  - regexp: "^#?gpu_mem"
+    line: "gpu_mem=16"
+  # Enable 1-Wire via GPIO.
+  - regexp: "^dtoverlay=w1-gpio"
+    line: "dtoverlay=w1-gpio"
+  # Turn off the PWR LED.
+  - regexp: "^dtparam=pwr_led_trigger="
+    line: "dtparam=pwr_led_trigger=none"
+  - regexp: "^dtparam=pwr_led_activelow="
+    line: "dtparam=pwr_led_activelow=off"
+raspberry_pi_rc_local_options:
+  # Disable HDMI on startup (for power savings).
+  - regexp: "^/usr/bin/tvservice"
+    line: "/usr/bin/tvservice -o"
+
 # Node.js vars. Used only for the dashboard/master server.
 nodejs_version: "0.12"
 nodejs_forever: true
