@@ -17,13 +17,14 @@ a {
   width: 100%;
   overflow: hidden;
   text-align: center;
+  margin: 1em 0;
 }
 
 #temperature-latest .sensor {
   float: left;
   background-color: #eee;
   padding: .75em 1.5em 1em;
-  margin: 1em 1em 1.5em;
+  margin: .5em;
 }
 
 #temperature-latest .title {
@@ -53,4 +54,26 @@ a {
   font-size: .8em;
   text-align: center;
   margin-top: 3em;
+}
+
+/* Responsive */
+@media screen and (max-width: 480px) {
+
+  h1 {
+    font-size: 1.5em;
+    text-align: center;
+  }
+
+  #temperature-latest {
+    margin: 1em 0;
+  }
+
+  #temperature-latest .sensor {
+    padding: .8em 1em;
+  }
+
+  #temperature-graph {
+    height: 15em;
+  }
+
 }
