@@ -1,0 +1,5 @@
+---
+- src: geerlingguy.git
+- src: geerlingguy.mysql
+- src: geerlingguy.nodejs
+- src: geerlingguy.raspberry-pi

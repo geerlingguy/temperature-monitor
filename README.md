@@ -21,7 +21,7 @@ This is a living project, so a lot of things will change while I experiment with
 Set up the virtual machine:
 
   1. Install Vagrant, VirtualBox and Ansible.
-  2. `cd` into each of the directories inside `playbooks` and run `ansible-galaxy install -r requirements.txt`.
+  2. `cd` into `playbooks` and run `ansible-galaxy install -r requirements.yml`.
   3. `cd` back into this directory and run `vagrant up`.
 
 
@@ -30,7 +30,7 @@ Set up the virtual machine:
 Before anything else, you need to install Ansible, then do the following:
 
   1. Copy `example.config.yml` to `config.yml`, and `inventory-example` to `inventory`, and update the values inside to match your desired environment and Pi IP addresses.
-  2. Run `ansible-galaxy install -r requirements.txt` inside the `playbooks` directory to install the required Ansible roles.
+  2. Run `ansible-galaxy install -r requirements.yml` inside the `playbooks` directory to install the required Ansible roles.
 
 
 ## Raspberry Pi Master Setup (Data Logger & Dashboard App)
