@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "dhoppe/debian-8.2.0-amd64-nocm"
+  config.vm.box = "geerlingguy/debian10"
 
   inventory_groups = {
     'master' => ['master'],
@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
 
     config.vm.provision :ansible do |ansible|
       ansible.playbook = "playbooks/master/main.yml"
-      ansible.sudo = true
+      ansible.become = true
       ansible.extra_vars = {
         deploy_target_is_pi: false,
         temperature_monitor_dir: '/vagrant',

@@ -1,9 +1,13 @@
 ---
 - hosts: remotes
-  become: yes
+  become: true
 
   vars_files:
     - ../../config/config.yml
+
+  handlers:
+    - name: restart pi-temps
+      service: name=pi-temps state=restarted
 
   pre_tasks:
     - name: Ensure apt cache is updated.
@@ -11,7 +15,8 @@
 
   roles:
     - geerlingguy.git
-    - geerlingguy.raspberry-pi
+    - role: geerlingguy.raspberry-pi
+      when: deploy_target_is_pi
 
   tasks:
     - name: Install dependencies for Python temperature scripts.
@@ -28,7 +33,7 @@
       git:
         repo: https://github.com/geerlingguy/temperature-monitor.git
         dest: "{{ temperature_monitor_dir }}"
-        update: yes
+        update: true
       become: true
       become_user: "{{ temperature_monitor_user }}"
       when: deploy_target_is_pi
@@ -53,7 +58,3 @@
 
     - name: Ensure the pi-temps service is active and enabled on boot.
       service: name=pi-temps state=started enabled=yes
-
-  handlers:
-    - name: restart pi-temps
-      service: name=pi-temps state=restarted

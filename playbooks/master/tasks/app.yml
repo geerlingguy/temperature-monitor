@@ -3,13 +3,13 @@
   npm: "path={{ temperature_monitor_dir }}/dashboard"
 
 - name: Get list of all running Node.js apps.
-  command: forever list
+  command: /usr/local/lib/npm/bin/forever list
   register: forever_list
   changed_when: false
 
 - name: Ensure Dashboard app is started.
   command: >
-    forever start ./bin/www
+    /usr/local/lib/npm/bin/forever start ./bin/www
     chdir={{ temperature_monitor_dir }}/dashboard
   when: "forever_list.stdout.find('bin/www') == -1"
 
@@ -17,4 +17,4 @@
   cron:
     name: "Start Temperature Monitor Dashboard app"
     special_time: reboot
-    job: "cd {{ temperature_monitor_dir }}/dashboard && /usr/bin/forever start ./bin/www"
+    job: "cd {{ temperature_monitor_dir }}/dashboard && /usr/local/lib/npm/bin/forever start ./bin/www"

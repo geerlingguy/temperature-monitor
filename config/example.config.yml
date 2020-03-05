@@ -36,8 +36,9 @@ raspberry_pi_rc_local_options:
     line: "/usr/bin/tvservice -o"
 
 # Node.js vars. Used only for the dashboard/master server.
-nodejs_version: "0.12"
-nodejs_forever: true
+nodejs_version: "12.x"
+nodejs_npm_global_packages:
+  - name: forever
 
 # MySQL vars. Used only for the dashboard/master server.
 mysql_root_password: root

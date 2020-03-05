@@ -1,13 +1,13 @@
 ---
 - hosts: master
-  become: yes
+  become: true
 
   vars_files:
     - ../../config/config.yml
 
   pre_tasks:
     - name: Ensure apt cache is updated.
-      apt: update_cache=yes cache_valid_time=86400
+      apt: update_cache=true cache_valid_time=86400
 
     - name: Ensure apt-transport-https is installed.
       apt: name=apt-transport-https state=present
@@ -16,14 +16,16 @@
     - geerlingguy.git
     - geerlingguy.mysql
     - geerlingguy.nodejs
-    - geerlingguy.raspberry-pi
+    - role: geerlingguy.raspberry-pi
+      when: deploy_target_is_pi
 
   tasks:
     - name: Install dependencies for Python temperature scripts.
-      apt: "name={{ item }} state=present"
-      with_items:
-        - python-pip
-        - python-dev
+      apt:
+        name:
+          - python-pip
+          - python-dev
+        state: present
 
     - name: Clean up bad Python requests package so pip works.
       shell: "rm -rf /usr/local/lib/python2.7/dist-packages/requests*"
@@ -33,7 +35,7 @@
       git:
         repo: https://github.com/geerlingguy/temperature-monitor.git
         dest: "{{ temperature_monitor_dir }}"
-        update: yes
+        update: true
       when: deploy_target_is_pi
 
     - name: Install required Python libraries with pip.
