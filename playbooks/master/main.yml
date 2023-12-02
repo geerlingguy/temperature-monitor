@@ -23,8 +23,9 @@
     - name: Install dependencies for Python temperature scripts.
       apt:
         name:
-          - python-pip
-          - python-dev
+          - python3-pip
+          - python3-dev
+          - python3-requests
         state: present
 
     - name: Clean up bad Python requests package so pip works.
@@ -33,13 +34,10 @@
 
     - name: Ensure the temperature-monitor repository is present.
       git:
-        repo: https://github.com/geerlingguy/temperature-monitor.git
+        repo: https://github.com/krispayne/temperature-monitor.git
         dest: "{{ temperature_monitor_dir }}"
         update: true
       when: deploy_target_is_pi
-
-    - name: Install required Python libraries with pip.
-      pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
 
     - name: Configure the settings file (temps.conf).
       template:

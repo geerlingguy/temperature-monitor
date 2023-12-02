@@ -10,11 +10,11 @@ from datetime import datetime
 import calendar
 import requests
 from temp_api import postTempData
+import configparser
 
-# Import configuration from 'temps.conf' file.
-config = {}
+config = configparser.ConfigParser()
 config_dir = os.path.dirname(os.path.abspath(__file__))
-execfile(config_dir + "/temps.conf", config)
+config.read(config_dir + '/temps.conf')
 
 # Read the temperature from a connected DS18B20 temperature sensor.
 def readTempFromGPIO():
@@ -31,7 +31,7 @@ def readTempFromGPIO():
     temp_c = float(temp_data[2:]) / 1000
     temp_f = temp_c * 9.0 / 5.0 + 32.0
     # Adjust the temperature according to the configured offset.
-    temp_f_adjusted = temp_f + config["local_temp_offset"]
+    temp_f_adjusted = temp_f + configi['dashboard']['local_temp_offset']
     temp = "{0:.2f}".format(temp_f_adjusted)
     return temp
 
@@ -42,10 +42,10 @@ while True:
     timestamp = calendar.timegm(date.utctimetuple())
 
     # Send data to temperature logger.
-    postTempData(config["local_sensor_id"], temp, timestamp)
+    postTempData(config['dashboard']['local_sensor_id'], temp, timestamp)
 
     # Log data to command line.
-    print "{0}, {1}".format(date, temp.rstrip())
+    print("{0}, {1}".format(date, temp.rstrip()))
 
     # Wait [local_temp_read_delay] seconds.
-    time.sleep(config["local_temp_read_delay"])
+    time.sleep(config['dashboard']['local_temp_read_delay'])

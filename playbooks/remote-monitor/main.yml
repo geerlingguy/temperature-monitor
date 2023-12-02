@@ -22,8 +22,9 @@
     - name: Install dependencies for Python temperature scripts.
       apt: "name={{ item }} state=present"
       with_items:
-        - python-pip
-        - python-dev
+        - python3-pip
+        - python3-dev
+        - python3-requests
 
     - name: Clean up bad Python requests package so pip works.
       shell: "rm -rf /usr/local/lib/python2.7/dist-packages/requests*"
@@ -31,16 +32,13 @@
 
     - name: Ensure the temperature-monitor repository is present.
       git:
-        repo: https://github.com/geerlingguy/temperature-monitor.git
+        repo: https://github.com/krispayne/temperature-monitor.git
         dest: "{{ temperature_monitor_dir }}"
         update: true
       become: true
       become_user: "{{ temperature_monitor_user }}"
       when: deploy_target_is_pi
       notify: restart pi-temps
-
-    - name: Install required Python libraries with pip.
-      pip: "requirements={{ temperature_monitor_dir }}/scripts/requirements.txt"
 
     - name: Configure the settings file (temps.conf).
       template:
@@ -49,10 +47,10 @@
         mode: 0644
       notify: restart pi-temps
 
-    - name: Configure the init file.
+    - name: Configure systemd service.
       template:
-        src: templates/pi-temps-init.j2
-        dest: "/etc/init.d/pi-temps"
+        src: templates/pi-temps-systemd.j2
+        dest: /etc/systemd/system/pi-temps.service
         mode: 0755
       notify: restart pi-temps
 

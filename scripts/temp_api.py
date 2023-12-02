@@ -4,14 +4,16 @@
 import os
 import glob
 import requests
+import configparser
 
 # Import configuration from 'temps.conf' file.
-config = {}
+config = configparser.ConfigParser()
 config_dir = os.path.dirname(os.path.abspath(__file__))
-execfile(config_dir + "/temps.conf", config)
+config.read(config_dir + '/temps.conf')
+
 
 # The URI of the dashboard app.
-dashboard_uri = config["dashboard_uri"] + "/temps"
+dashboard_uri = config['dashboard']['dashboard_uri'] + '/temps'
 
 # Post temperature sensor data to dashboard app.
 def postTempData(sensor_id, temp, time, exit_on_error=False):
@@ -26,12 +28,12 @@ def postTempData(sensor_id, temp, time, exit_on_error=False):
 
         # Print error, but don't exit, if data couldn't be written.
         if post.status_code != requests.codes.ok:
-            print "Could not post data to dashboard app: " + post.json()['error']
+            print("Could not post data to dashboard app: " + post.json()['error'])
             if exit_on_error:
                 exit(1)
 
     except requests.exceptions.ConnectionError as e:
         # TODO: Print the message in the ConnectionError.
-        print "A connection could not be established with the dashboard API."
+        print("A connection could not be established with the dashboard API.")
         if exit_on_error:
             exit(1)
