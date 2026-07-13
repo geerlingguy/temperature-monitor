@@ -11,7 +11,7 @@
     "cookie-parser": "~1.4.7",
     "debug": "^2.6.9",
     "express": "^5.2.0",
-    "morgan": "^1.10.1",
+    "morgan": "^1.11.0",
     "mysql": "*",
     "pug": "^3.0.3",
     "serve-favicon": "^2.5.0"
